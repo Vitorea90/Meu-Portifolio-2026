@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { skills as defaultSkills } from '../data/portfolio-data';
 import './Skills.css';
 
 const Skills = () => {
@@ -10,9 +11,23 @@ const Skills = () => {
     useEffect(() => {
         // Load skills from localStorage
         const loadSkills = () => {
-            const savedSkills = JSON.parse(localStorage.getItem('portfolio_skills') || '[]');
-            console.log('Skills: Loaded skills:', savedSkills);
-            setSkills(savedSkills);
+            const saved = localStorage.getItem('portfolio_skills');
+            let loadedSkills = [];
+
+            if (saved) {
+                loadedSkills = JSON.parse(saved);
+            }
+
+            if (!loadedSkills || loadedSkills.length === 0) {
+                console.log('Skills: Using default skills');
+                loadedSkills = defaultSkills;
+                // Optionally save defaults to storage to persist them for editing
+                // localStorage.setItem('portfolio_skills', JSON.stringify(defaultSkills));
+            } else {
+                console.log('Skills: Loaded from storage:', loadedSkills.length);
+            }
+
+            setSkills(loadedSkills);
         };
 
         loadSkills();

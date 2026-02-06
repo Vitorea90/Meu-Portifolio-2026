@@ -4,6 +4,7 @@ import Submissions from './Submissions';
 import Skills from './Skills';
 import Projects from './Projects';
 import Events from './Events';
+import DataManagement from './DataManagement';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -22,6 +23,7 @@ const Dashboard = () => {
         { id: 'skills', label: 'Habilidades', icon: '💡' },
         { id: 'projects', label: 'Projetos', icon: '🚀' },
         { id: 'events', label: 'Eventos', icon: '🏆' },
+        { id: 'data', label: 'Dados', icon: '💾' },
     ];
 
     return (
@@ -70,6 +72,7 @@ const Dashboard = () => {
                     {activeTab === 'skills' && <Skills />}
                     {activeTab === 'projects' && <Projects />}
                     {activeTab === 'events' && <Events />}
+                    {activeTab === 'data' && <DataManagement />}
                 </div>
             </main>
         </div>

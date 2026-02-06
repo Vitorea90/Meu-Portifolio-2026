@@ -1,9 +1,15 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
-import { personalInfo } from '../data/portfolio-data';
+import { motion, useInView } from 'framer-motion';
+import { personalInfo, publications, eventsAndAwards } from '../data/portfolio-data';
 import './About.css';
 
 const About = () => {
+    // Calculate stats
+    const projectCount = publications.filter(p => p.type === 'Projeto').length;
+    const eventCount = publications.filter(p => p.type === 'Evento').length + eventsAndAwards.filter(e => e.type === 'event').length;
+    const awardCount = publications.filter(p => p.type === 'Premiação').length + eventsAndAwards.filter(e => e.type === 'award').length;
+
     const ref = React.useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -59,7 +65,7 @@ const About = () => {
                                             animate={isInView ? { opacity: 1, scale: 1 } : {}}
                                             transition={{ delay: 0.5, duration: 0.5 }}
                                         >
-                                            50+
+                                            {projectCount}+
                                         </motion.div>
                                         <div className="stat-label">Projetos</div>
                                     </div>
@@ -71,7 +77,7 @@ const About = () => {
                                             animate={isInView ? { opacity: 1, scale: 1 } : {}}
                                             transition={{ delay: 0.7, duration: 0.5 }}
                                         >
-                                            15+
+                                            {eventCount}+
                                         </motion.div>
                                         <div className="stat-label">Eventos</div>
                                     </div>
@@ -83,7 +89,7 @@ const About = () => {
                                             animate={isInView ? { opacity: 1, scale: 1 } : {}}
                                             transition={{ delay: 0.9, duration: 0.5 }}
                                         >
-                                            8+
+                                            {awardCount}+
                                         </motion.div>
                                         <div className="stat-label">Premiações</div>
                                     </div>

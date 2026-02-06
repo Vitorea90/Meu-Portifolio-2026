@@ -134,51 +134,7 @@ export const publications = [
         date: "2022",
         tags: ["Flutter", "Firebase", "Sustentabilidade"]
     }
-    {
-        id: 10,
-        title: "Smart Home Controller",
-        type: "Projeto",
-        description: "Interface centralizada para controle de dispositivos IoT residenciais com automações baseadas em rotina.",
-        image: "/project-smart-home.jpg",
-        date: "2023",
-        tags: ["IoT", "React", "Node-RED"]
-    },
-    {
-        id: 11,
-        title: "AgroTech Monitor",
-        type: "Projeto",
-        description: "Sistema de monitoramento de lavouras utilizando imagens de satélite e análise de dados climáticos.",
-        image: "/project-agro.jpg",
-        date: "2023",
-        tags: ["Python", "GIS", "Agro"]
-    },
-    {
-        id: 12,
-        title: "FinTech Dashboard",
-        type: "Projeto",
-        description: "Painel financeiro pessoal com integração bancária aberta e categorização automática de despesas.",
-        image: "/project-fintech.jpg",
-        date: "2022",
-        tags: ["Vue.js", "Chart.js", "Open Finance"]
-    },
-    {
-        id: 13,
-        title: "EduLearn Platform",
-        type: "Projeto",
-        description: "Plataforma de ensino a distância com gamificação e trilhas de aprendizado adaptativas.",
-        image: "/project-edu.jpg",
-        date: "2022",
-        tags: ["React", "Gamification", "EdTech"]
-    },
-    {
-        id: 14,
-        title: "EcoTrack App",
-        type: "Projeto",
-        description: "Aplicativo para rastreamento de pegada de carbono pessoal e dicas de sustentabilidade.",
-        image: "/project-eco.jpg",
-        date: "2022",
-        tags: ["Flutter", "Firebase", "Sustentabilidade"]
-    }
+
 ];
 
 // Projetos em Destaque para o Carrossel

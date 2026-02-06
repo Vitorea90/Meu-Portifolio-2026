@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
-import { motion, useInView } from 'framer-motion';
+
 import { personalInfo, publications, eventsAndAwards } from '../data/portfolio-data';
 import './About.css';
 

@@ -276,3 +276,14 @@ export const eventsAndAwards = [
         image: "/timeline-13.jpg"
     }
 ];
+
+export const skills = [
+    { id: 1, name: "React", category: "Frontend", proficiency: 90 },
+    { id: 2, name: "JavaScript", category: "Language", proficiency: 85 },
+    { id: 3, name: "CSS/Sass", category: "Frontend", proficiency: 80 },
+    { id: 4, name: "Node.js", category: "Backend", proficiency: 75 },
+    { id: 5, name: "Python", category: "Language", proficiency: 70 },
+    { id: 6, name: "Git", category: "Tool", proficiency: 85 },
+    { id: 7, name: "Design System", category: "Design", proficiency: 80 },
+    { id: 8, name: "Figma", category: "Design", proficiency: 75 }
+];

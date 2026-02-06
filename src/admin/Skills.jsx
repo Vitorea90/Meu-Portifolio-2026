@@ -100,17 +100,7 @@ const Skills = () => {
                             </div>
                         </div>
 
-                        <div className="form-group">
-                            <label>Proficiência: {formData.proficiency}%</label>
-                            <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                value={formData.proficiency}
-                                onChange={(e) => setFormData({ ...formData, proficiency: parseInt(e.target.value) })}
-                                className="range-input"
-                            />
-                        </div>
+
 
                         <div className="form-actions">
                             <button type="submit" className="btn btn-primary">
@@ -131,15 +121,7 @@ const Skills = () => {
                             <h3 className="skill-name">{skill.name}</h3>
                             <span className="skill-category">{skill.category}</span>
                         </div>
-                        <div className="skill-proficiency">
-                            <div className="proficiency-bar">
-                                <div
-                                    className="proficiency-fill"
-                                    style={{ width: `${skill.proficiency}%` }}
-                                ></div>
-                            </div>
-                            <span className="proficiency-label">{skill.proficiency}%</span>
-                        </div>
+
                         <div className="skill-actions">
                             <button onClick={() => handleEdit(skill)} className="btn-small">
                                 ✏️ Editar

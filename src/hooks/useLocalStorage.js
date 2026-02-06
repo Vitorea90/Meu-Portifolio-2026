@@ -25,9 +25,9 @@ export const useLocalStorage = (key, initialValue) => {
 };
 
 // Specific hooks for different data types
-import { publications, eventsAndAwards, featuredProjects } from '../data/portfolio-data';
+import { publications, eventsAndAwards, featuredProjects, skills } from '../data/portfolio-data';
 
 export const useSubmissions = () => useLocalStorage('portfolio_submissions', []);
-export const useSkills = () => useLocalStorage('portfolio_skills', []);
+export const useSkills = () => useLocalStorage('portfolio_skills', skills || []);
 export const useProjects = () => useLocalStorage('portfolio_projects', featuredProjects || []);
 export const useEvents = () => useLocalStorage('portfolio_events', eventsAndAwards || []);

@@ -3,7 +3,12 @@ export const personalInfo = {
     name: "Vitor Emanuel",
     title: "Desenvolvedor Full Stack, Designer e Inovador",
     bio: "Sou um profissional focado em tecnologia aplicada e inovação, com experiência prática em hackathons, projetos e desenvolvimento de soluções reais. Ao longo da minha trajetória, participei de eventos ligados à tecnologia e ao agronegócio, conquistando reconhecimento em hackathons, especialmente em iniciativas voltadas à soluções práticas para o agronegócio.",
-    profileImage: "/profile-placeholder.jpg"
+    profileImage: "/profile-placeholder.jpg",
+    socialMedia: {
+        linkedin: "https://www.linkedin.com/in/vitor-emanuel-de-almeida-65918225b/",
+        github: "https://github.com/Vitorea90",
+        instagram: "https://www.instagram.com/vitor_ea_/"
+    }
 };
 
 // Publicações (Projetos, Eventos, Premiações)

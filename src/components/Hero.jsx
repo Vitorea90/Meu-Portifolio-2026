@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { personalInfo } from '../data/portfolio-data';
 import './Hero.css';
 
 const Hero = () => {
@@ -30,14 +31,14 @@ const Hero = () => {
                             </div>
 
                             <div className="hero-socials">
-                                <a href="#" target="_blank" className="social-link" aria-label="Instagram">
-                                    <img src="/instagram.png" alt="" />
+                                <a href={personalInfo.socialMedia.instagram} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="Instagram">
+                                    <img src="/instagram.png" alt="Instagram" />
                                 </a>
-                                <a href="#" target="_blank" className="social-link" aria-label="LinkedIn">
-                                    <img src="/linkedin.png" alt="" />
+                                <a href={personalInfo.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="LinkedIn">
+                                    <img src="/linkedin.png" alt="LinkedIn" />
                                 </a>
-                                <a href="#" target="_blank" className="social-link" aria-label="GitHub">
-                                    <img src="/github.png" alt="" />
+                                <a href={personalInfo.socialMedia.github} target="_blank" rel="noopener noreferrer" className="social-link" aria-label="GitHub">
+                                    <img src="/github.png" alt="GitHub" />
                                 </a>
                             </div>
                         </motion.div>

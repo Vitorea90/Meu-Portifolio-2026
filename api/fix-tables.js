@@ -8,6 +8,11 @@ export default async function handler(request, response) {
         // Upgrade events table
         await sql`ALTER TABLE events ALTER COLUMN id TYPE BIGINT;`;
         await sql`ALTER TABLE events ALTER COLUMN year TYPE TEXT;`;
+        try {
+            await sql`ALTER TABLE events ADD COLUMN icon TEXT;`;
+        } catch (e) {
+            console.log("Icon column might already exist", e.message);
+        }
 
         // Upgrade skills table (adding id if it's missing or serial)
         try {

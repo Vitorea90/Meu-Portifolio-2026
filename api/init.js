@@ -27,6 +27,7 @@ export default async function handler(request, response) {
         year TEXT,
         type TEXT,
         award TEXT,
+        icon TEXT,
         image TEXT,
         images TEXT[],
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

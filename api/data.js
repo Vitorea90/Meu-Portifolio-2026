@@ -30,7 +30,7 @@ export default async function handler(request, response) {
             if (type === 'projects') {
                 result = await sql`SELECT id, title, description, image, tech_stack, link, github FROM projects ORDER BY id ASC;`;
             } else if (type === 'events') {
-                result = await sql`SELECT id, title, description, date, year, type, award, image FROM events ORDER BY id ASC;`;
+                result = await sql`SELECT id, title, description, date, year, type, award, icon, image FROM events ORDER BY id ASC;`;
             } else if (type === 'skills') {
                 result = await sql`SELECT * FROM skills ORDER BY id ASC;`;
             } else {
@@ -89,8 +89,8 @@ export default async function handler(request, response) {
                     const images = Array.isArray(item.images) ? item.images : [];
                     const year = item.year || (item.date ? new Date(item.date).getFullYear().toString() : '');
                     await sql`
-                        INSERT INTO events (id, title, description, date, year, type, award, image, images)
-                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.date}, ${year}, ${item.type}, ${item.award}, ${item.image}, ${images})
+                        INSERT INTO events (id, title, description, date, year, type, award, icon, image, images)
+                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.date}, ${year}, ${item.type}, ${item.award}, ${item.icon}, ${item.image}, ${images})
                         ON CONFLICT (id) DO UPDATE SET
                             title = EXCLUDED.title,
                             description = EXCLUDED.description,
@@ -98,6 +98,7 @@ export default async function handler(request, response) {
                             year = EXCLUDED.year,
                             type = EXCLUDED.type,
                             award = EXCLUDED.award,
+                            icon = EXCLUDED.icon,
                             image = EXCLUDED.image,
                             images = EXCLUDED.images,
                             updated_at = CURRENT_TIMESTAMP;
@@ -134,8 +135,8 @@ export default async function handler(request, response) {
                         const images = Array.isArray(item.images) ? item.images : [];
                         const year = item.year || (item.date ? new Date(item.date).getFullYear().toString() : '');
                         await sql`
-                            INSERT INTO events (id, title, description, date, year, type, award, image, images)
-                            VALUES (${item.id}, ${item.title}, ${item.description}, ${item.date}, ${year}, ${item.type}, ${item.award}, ${item.image}, ${images});
+                            INSERT INTO events (id, title, description, date, year, type, award, icon, image, images)
+                            VALUES (${item.id}, ${item.title}, ${item.description}, ${item.date}, ${year}, ${item.type}, ${item.award}, ${item.icon}, ${item.image}, ${images});
                         `;
                     }
                 } else if (type === 'skills') {

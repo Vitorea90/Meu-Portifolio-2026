@@ -38,22 +38,63 @@ function AppContent() {
 
     // Project detail page
     if (path.startsWith('/projeto/')) {
-        const projectId = path.split('/projeto/')[1];
-        return (
-            <div className="app">
-                <Navbar activeSection="projects" />
-                <ProjectDetail projectId={projectId} />
-            </div>
-        );
+        const projectId = path.split('/projeto/')[1].replace(/\/$/, ''); // Remove trailing slash if present
+        if (projectId) {
+            return (
+                <div className="app">
+                    <Navbar activeSection="projects" />
+                    <ProjectDetail projectId={projectId} />
+                </div>
+            );
+        }
     }
 
     // Event detail page
     if (path.startsWith('/evento/')) {
-        const eventId = path.split('/evento/')[1];
+        const eventId = path.split('/evento/')[1].replace(/\/$/, ''); // Remove trailing slash if present
+        if (eventId) {
+            return (
+                <div className="app">
+                    <Navbar activeSection="events" />
+                    <EventDetail eventId={eventId} />
+                </div>
+            );
+        }
+    }
+
+    // Handle plural aliases / direct section links - render Home
+    // Navbar will handle scrolling based on activeSection if we map it correctly, 
+    // OR we can just redirect/render home with the correct active section.
+    if (path === '/projetos' || path === '/projetos/') {
+        // Technically this should redirect to /#projects but rendering Home with 'projects' active works too
+        return (
+            <div className="app">
+                <Navbar activeSection="projects" />
+                <main>
+                    <Hero />
+                    <About />
+                    <Skills />
+                    <ProjectsCarousel />
+                    <EventsAwards />
+                </main>
+                <Footer />
+                {/* Auto-scroll effect could be added here or in Navbar */}
+            </div>
+        );
+    }
+
+    if (path === '/eventos' || path === '/eventos/') {
         return (
             <div className="app">
                 <Navbar activeSection="events" />
-                <EventDetail eventId={eventId} />
+                <main>
+                    <Hero />
+                    <About />
+                    <Skills />
+                    <ProjectsCarousel />
+                    <EventsAwards />
+                </main>
+                <Footer />
             </div>
         );
     }

@@ -88,6 +88,96 @@ export const publications = [
         image: "/award-3.jpg",
         date: "2022",
         tags: ["Educação", "Cloud Computing"]
+    },
+    {
+        id: 10,
+        title: "Smart Home Controller",
+        type: "Projeto",
+        description: "Interface centralizada para controle de dispositivos IoT residenciais com automações baseadas em rotina.",
+        image: "/project-smart-home.jpg",
+        date: "2023",
+        tags: ["IoT", "React", "Node-RED"]
+    },
+    {
+        id: 11,
+        title: "AgroTech Monitor",
+        type: "Projeto",
+        description: "Sistema de monitoramento de lavouras utilizando imagens de satélite e análise de dados climáticos.",
+        image: "/project-agro.jpg",
+        date: "2023",
+        tags: ["Python", "GIS", "Agro"]
+    },
+    {
+        id: 12,
+        title: "FinTech Dashboard",
+        type: "Projeto",
+        description: "Painel financeiro pessoal com integração bancária aberta e categorização automática de despesas.",
+        image: "/project-fintech.jpg",
+        date: "2022",
+        tags: ["Vue.js", "Chart.js", "Open Finance"]
+    },
+    {
+        id: 13,
+        title: "EduLearn Platform",
+        type: "Projeto",
+        description: "Plataforma de ensino a distância com gamificação e trilhas de aprendizado adaptativas.",
+        image: "/project-edu.jpg",
+        date: "2022",
+        tags: ["React", "Gamification", "EdTech"]
+    },
+    {
+        id: 14,
+        title: "EcoTrack App",
+        type: "Projeto",
+        description: "Aplicativo para rastreamento de pegada de carbono pessoal e dicas de sustentabilidade.",
+        image: "/project-eco.jpg",
+        date: "2022",
+        tags: ["Flutter", "Firebase", "Sustentabilidade"]
+    }
+    {
+        id: 10,
+        title: "Smart Home Controller",
+        type: "Projeto",
+        description: "Interface centralizada para controle de dispositivos IoT residenciais com automações baseadas em rotina.",
+        image: "/project-smart-home.jpg",
+        date: "2023",
+        tags: ["IoT", "React", "Node-RED"]
+    },
+    {
+        id: 11,
+        title: "AgroTech Monitor",
+        type: "Projeto",
+        description: "Sistema de monitoramento de lavouras utilizando imagens de satélite e análise de dados climáticos.",
+        image: "/project-agro.jpg",
+        date: "2023",
+        tags: ["Python", "GIS", "Agro"]
+    },
+    {
+        id: 12,
+        title: "FinTech Dashboard",
+        type: "Projeto",
+        description: "Painel financeiro pessoal com integração bancária aberta e categorização automática de despesas.",
+        image: "/project-fintech.jpg",
+        date: "2022",
+        tags: ["Vue.js", "Chart.js", "Open Finance"]
+    },
+    {
+        id: 13,
+        title: "EduLearn Platform",
+        type: "Projeto",
+        description: "Plataforma de ensino a distância com gamificação e trilhas de aprendizado adaptativas.",
+        image: "/project-edu.jpg",
+        date: "2022",
+        tags: ["React", "Gamification", "EdTech"]
+    },
+    {
+        id: 14,
+        title: "EcoTrack App",
+        type: "Projeto",
+        description: "Aplicativo para rastreamento de pegada de carbono pessoal e dicas de sustentabilidade.",
+        image: "/project-eco.jpg",
+        date: "2022",
+        tags: ["Flutter", "Firebase", "Sustentabilidade"]
     }
 ];
 
@@ -172,5 +262,61 @@ export const eventsAndAwards = [
         year: "2022",
         description: "Universidade Federal - TCC Destaque",
         image: "/timeline-6.jpg"
+    },
+    {
+        id: 7,
+        title: "AgroFuture Summit",
+        type: "event",
+        year: "2022",
+        description: "Painelista sobre Inovação no Campo",
+        image: "/timeline-7.jpg"
+    },
+    {
+        id: 8,
+        title: "Startup Weekend",
+        type: "event",
+        year: "2022",
+        description: "Mentor de times de desenvolvimento",
+        image: "/timeline-8.jpg"
+    },
+    {
+        id: 9,
+        title: "TechCommunity Meetup",
+        type: "event",
+        year: "2021",
+        description: "Organizador e Host do evento local",
+        image: "/timeline-9.jpg"
+    },
+    {
+        id: 10,
+        title: "AI Ethics Symposium",
+        type: "event",
+        year: "2021",
+        description: "Participante do debate sobre ética em IA",
+        image: "/timeline-10.jpg"
+    },
+    {
+        id: 11,
+        title: "Web Summit Lisboa",
+        type: "event",
+        year: "2021",
+        description: "Participante da delegação brasileira",
+        image: "/timeline-11.jpg"
+    },
+    {
+        id: 12,
+        title: "Destaque Inovação Jovem",
+        type: "award",
+        year: "2021",
+        description: "Prêmio regional de incentivo à tecnologia",
+        image: "/timeline-12.jpg"
+    },
+    {
+        id: 13,
+        title: "Certificação Cloud Expert",
+        type: "award",
+        year: "2020",
+        description: "Reconhecimento por expertise em arquitetura nuvem",
+        image: "/timeline-13.jpg"
     }
 ];

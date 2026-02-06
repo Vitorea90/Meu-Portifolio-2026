@@ -54,7 +54,60 @@ export const useVercelData = (type, initialValue) => {
         }
     };
 
-    return [data, saveData, loading];
+    const upsertItem = async (item) => {
+        try {
+            const response = await fetch(`/api/data?type=${type}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ action: 'upsert', item }),
+            });
+
+            if (response.ok) {
+                setData(prev => {
+                    const exists = prev.find(i => i.id == item.id);
+                    if (exists) {
+                        return prev.map(i => i.id == item.id ? { ...i, ...item } : i);
+                    }
+                    return [item, ...prev];
+                });
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error(`Error upserting ${type} item to Vercel:`, error);
+            return false;
+        }
+    };
+
+    const deleteItem = async (id) => {
+        try {
+            const response = await fetch(`/api/data?type=${type}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ action: 'delete', id }),
+            });
+
+            if (response.ok) {
+                setData(prev => prev.filter(i => i.id != id));
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error(`Error deleting ${type} item from Vercel:`, error);
+            return false;
+        }
+    };
+
+    const controller = (newData) => saveData(newData);
+    controller.save = saveData;
+    controller.upsert = upsertItem;
+    controller.delete = deleteItem;
+
+    return [data, controller, loading];
 };
 
 export const useVercelProjects = () => useVercelData('projects', featuredProjects);

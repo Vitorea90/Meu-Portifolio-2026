@@ -25,9 +25,10 @@ const Projects = () => {
         };
         // ... existing logic ...
         if (editingId) {
-            setProjects(projects.map(project =>
-                project.id === editingId ? { ...project, ...projectData } : project
-            ));
+            setProjects.upsert({
+                id: editingId,
+                ...projectData
+            });
             setEditingId(null);
         } else {
             const newProject = {
@@ -35,7 +36,7 @@ const Projects = () => {
                 ...projectData,
                 date: new Date().toISOString()
             };
-            setProjects([newProject, ...projects]);
+            setProjects.upsert(newProject);
         }
 
         resetForm();
@@ -58,7 +59,7 @@ const Projects = () => {
 
     const handleDelete = (id) => {
         if (window.confirm('Tem certeza que deseja excluir este projeto?')) {
-            setProjects(projects.filter(project => project.id !== id));
+            setProjects.delete(id);
         }
     };
 

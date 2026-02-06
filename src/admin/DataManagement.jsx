@@ -8,6 +8,7 @@ const DataManagement = () => {
     const [projects, setProjects] = useVercelProjects();
     const [events, setEvents] = useVercelEvents();
     const [skills, setSkills] = useVercelSkills();
+    const [syncStatus, setSyncStatus] = useState('');
 
     const handleExport = () => {
         const data = {
@@ -81,17 +82,41 @@ const DataManagement = () => {
                 skills: dataModule.skills
             };
 
-            if (window.confirm('Isso copiará todos os dados do arquivo local (portfolio-data.js) para o Vercel Postgres, substituindo os dados existentes na nuvem. Deseja continuar?')) {
+            if (window.confirm('Isso copiará todos os dados do arquivo local (portfolio-data.js) para o Vercel Postgres, item por item para evitar limites de tamanho. Deseja continuar?')) {
                 setIsInitializing(true);
-                if (localData.projects) await setProjects(localData.projects);
-                if (localData.events) await setEvents(localData.events);
-                if (localData.skills) await setSkills(localData.skills);
 
+                // Projects
+                setSyncStatus('Enviando Projetos (1/3)...');
+                if (localData.projects) {
+                    for (const p of localData.projects) {
+                        await setProjects.upsert(p);
+                    }
+                }
+
+                // Events
+                setSyncStatus('Enviando Eventos (2/3)...');
+                if (localData.events) {
+                    for (const e of localData.events) {
+                        await setEvents.upsert(e);
+                    }
+                }
+
+                // Skills
+                setSyncStatus('Enviando Habilidades (3/3)...');
+                if (localData.skills) {
+                    for (const s of localData.skills) {
+                        await setSkills.upsert(s);
+                    }
+                }
+
+                setSyncStatus('Sincronização concluída!');
+                setTimeout(() => setSyncStatus(''), 3000);
                 alert('Sincronização concluída com sucesso!');
             }
         } catch (error) {
             console.error('Erro na sincronização:', error);
             alert('Erro ao carregar dados locais: ' + error.message);
+            setSyncStatus('Erro ao sincronizar.');
         } finally {
             setIsInitializing(false);
         }
@@ -129,6 +154,11 @@ const DataManagement = () => {
                 >
                     {isInitializing ? 'Sincronizando...' : 'Sincronizar com Dados Locais'}
                 </button>
+                {syncStatus && (
+                    <div style={{ color: '#00ff00', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>
+                        {syncStatus}
+                    </div>
+                )}
                 <button
                     onClick={async () => {
                         if (!window.confirm('Deseja aplicar a correção de compatibilidade (BIGINT) no banco de dados? Faça isso se novos itens não estiverem sendo salvos.')) return;

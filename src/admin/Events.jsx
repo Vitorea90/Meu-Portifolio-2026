@@ -22,13 +22,11 @@ const Events = () => {
         e.preventDefault();
 
         if (editingId) {
-            setEvents(events.map(event =>
-                event.id === editingId ? {
-                    ...event,
-                    ...formData,
-                    image: formData.images && formData.images.length > 0 ? formData.images[0] : formData.image
-                } : event
-            ));
+            setEvents.upsert({
+                id: editingId,
+                ...formData,
+                image: formData.images && formData.images.length > 0 ? formData.images[0] : formData.image
+            });
             setEditingId(null);
         } else {
             const newEvent = {
@@ -36,7 +34,7 @@ const Events = () => {
                 ...formData,
                 image: formData.images && formData.images.length > 0 ? formData.images[0] : formData.image
             };
-            setEvents([newEvent, ...events]);
+            setEvents.upsert(newEvent);
         }
 
         resetForm();
@@ -60,7 +58,7 @@ const Events = () => {
 
     const handleDelete = (id) => {
         if (window.confirm('Tem certeza que deseja excluir este evento?')) {
-            setEvents(events.filter(event => event.id !== id));
+            setEvents.delete(id);
         }
     };
 

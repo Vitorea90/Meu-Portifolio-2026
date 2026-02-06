@@ -18,9 +18,7 @@ const Skills = () => {
 
         if (editingId) {
             // Update existing skill
-            setSkills(skills.map(skill =>
-                skill.id === editingId ? { ...skill, ...formData } : skill
-            ));
+            setSkills.upsert({ id: editingId, ...formData });
             setEditingId(null);
         } else {
             // Add new skill
@@ -28,7 +26,7 @@ const Skills = () => {
                 id: Date.now(),
                 ...formData
             };
-            setSkills([...skills, newSkill]);
+            setSkills.upsert(newSkill);
         }
 
         resetForm();
@@ -46,7 +44,7 @@ const Skills = () => {
 
     const handleDelete = (id) => {
         if (window.confirm('Tem certeza que deseja excluir esta habilidade?')) {
-            setSkills(skills.filter(skill => skill.id !== id));
+            setSkills.delete(id);
         }
     };
 

@@ -10,32 +10,48 @@ export default async function handler(request, response) {
         try {
             if (id) {
                 // Fetch single item with all data
-                if (type === 'projects') {
-                    result = await sql`SELECT * FROM projects WHERE id = ${id};`;
-                } else if (type === 'events') {
-                    result = await sql`SELECT * FROM events WHERE id = ${id};`;
-                } else if (type === 'skills') {
-                    result = await sql`SELECT * FROM skills WHERE id = ${id};`;
+                try {
+                    if (type === 'projects') result = await sql`SELECT * FROM projects WHERE id = ${id};`;
+                    else if (type === 'events') result = await sql`SELECT * FROM events WHERE id = ${id};`;
+                    else if (type === 'skills') result = await sql`SELECT * FROM skills WHERE id = ${id};`;
+                } catch (e) {
+                    // Fallback if 'icon' or other new columns are missing
+                    console.log(`Column error in single fetch, likely missing new column: ${e.message}`);
+                    if (type === 'events') result = await sql`SELECT id, title, description, date, year, type, award, image, images FROM events WHERE id = ${id};`;
+                    else throw e;
                 }
+
+                if (!result.rows[0]) return response.status(200).json(null);
+
                 // Helper to map snake_case to camelCase for single item
-                const mappedItem = result.rows[0] ? Object.keys(result.rows[0]).reduce((acc, key) => {
+                const mappedItem = Object.keys(result.rows[0]).reduce((acc, key) => {
                     const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
                     acc[camelKey] = result.rows[0][key];
                     return acc;
-                }, {}) : null;
+                }, {});
                 return response.status(200).json(mappedItem);
             }
 
-            // Fetch list - Exclude large 'images' array for projects and events
-            if (type === 'projects') {
-                result = await sql`SELECT id, title, description, image, tech_stack, link, github FROM projects ORDER BY id ASC;`;
-            } else if (type === 'events') {
-                result = await sql`SELECT id, title, description, date, year, type, award, icon, image FROM events ORDER BY id ASC;`;
-            } else if (type === 'skills') {
-                result = await sql`SELECT * FROM skills ORDER BY id ASC;`;
-            } else {
-                return response.status(400).json({ error: 'Invalid type' });
+            // Fetch list - Exclude large 'images' array
+            try {
+                if (type === 'projects') {
+                    result = await sql`SELECT id, title, description, image, tech_stack, link, github FROM projects ORDER BY id ASC;`;
+                } else if (type === 'events') {
+                    result = await sql`SELECT id, title, description, date, year, type, award, icon, image FROM events ORDER BY id ASC;`;
+                } else if (type === 'skills') {
+                    result = await sql`SELECT * FROM skills ORDER BY id ASC;`;
+                }
+            } catch (e) {
+                // Fallback for missing 'icon' column in list view
+                if (type === 'events' && e.message.includes('icon')) {
+                    console.log("Fallback: 'icon' column missing in events table");
+                    result = await sql`SELECT id, title, description, date, year, type, award, image FROM events ORDER BY id ASC;`;
+                } else {
+                    throw e;
+                }
             }
+
+            if (!result) return response.status(400).json({ error: 'Invalid type' });
 
             // Helper to map snake_case to camelCase
             const mappedData = result.rows.map(row => {
@@ -50,7 +66,7 @@ export default async function handler(request, response) {
             return response.status(200).json(mappedData);
         } catch (error) {
             console.error('API Error:', error);
-            // On error, return empty array to prevent frontend crash
+            // On error, return empty array to prevent frontend crash but log it
             return response.status(200).json([]);
         }
     }

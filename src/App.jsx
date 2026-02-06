@@ -8,6 +8,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
+import Skills from './components/Skills';
 import ProjectsCarousel from './components/ProjectsCarousel';
 import EventsAwards from './components/EventsAwards';
 import Footer from './components/Footer';
@@ -64,6 +65,7 @@ function AppContent() {
             <main>
                 <Hero />
                 <About />
+                <Skills />
                 <ProjectsCarousel />
                 <EventsAwards />
             </main>

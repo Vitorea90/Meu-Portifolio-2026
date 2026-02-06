@@ -2,13 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './EventDetail.css';
 
+import { eventsAndAwards, publications } from '../data/portfolio-data';
+
 const EventDetail = ({ eventId }) => {
     const [event, setEvent] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
-        const events = JSON.parse(localStorage.getItem('portfolio_events') || '[]');
-        const found = events.find(e => e.id === parseInt(eventId));
+        // Try to find in localStorage first
+        const localEvents = JSON.parse(localStorage.getItem('portfolio_events') || '[]');
+        let found = localEvents.find(e => e.id === parseInt(eventId));
+
+        // If not found, check static data
+        if (!found) {
+            found = eventsAndAwards.find(e => e.id === parseInt(eventId));
+
+            // Also check publications for type != 'Projeto' just in case
+            if (!found) {
+                found = publications.find(p => p.id === parseInt(eventId) && p.type !== 'Projeto');
+            }
+        }
+
         setEvent(found);
     }, [eventId]);
 

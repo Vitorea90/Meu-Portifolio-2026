@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import './EventsAwards.css';
 import { useVercelEvents } from '../hooks/useVercel';
 

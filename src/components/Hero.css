@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HERO SECTION - BULLETPROOF FLEX LAYOUT
+   HERO SECTION - GROUNDED IMAGE LAYOUT
    ========================================================================== */
 
 /* 1. Base Container */
@@ -8,8 +8,9 @@
     width: 100%;
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* Garante que tudo cresça a partir de baixo se necessário */
     overflow: hidden;
     padding-top: 80px;
     background: linear-gradient(135deg, #0a0a0f 0%, #1a1a24 100%);
@@ -42,25 +43,29 @@
 /* 2. Layout Wrapper */
 .hero-container {
     width: 100%;
-    max-width: 1200px;
-    /* Reduzi um pouco a largura máxima para monitores ultrawide */
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0 2rem;
     position: relative;
     z-index: 10;
-    display: block;
+    flex: 1;
+    /* Ocupa toda altura disponível */
+    display: flex;
+    flex-direction: column;
 }
 
-/* 3. FLEX CONTENT - DESKTOP FORCE */
+/* 3. FLEX CONTENT - DESKTOP */
 .hero-content {
     display: flex !important;
     flex-direction: row !important;
-    /* Lado a Lado no Desktop */
-    align-items: center !important;
+    align-items: stretch !important;
+    /* CRÍTICO: Faz as colunas terem a mesma altura (100%) */
     justify-content: space-between !important;
-    gap: 2rem;
     width: 100%;
+    flex: 1;
+    /* Garante que o conteúdo estique até o fim da section */
     min-height: 600px;
+    /* Altura mínima de segurança */
 }
 
 /* 4. Coluna de Texto (Esquerda) */
@@ -71,7 +76,12 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    /* Centraliza verticalmente o texto na coluna dele */
     text-align: left;
+    padding-bottom: 4rem;
+    /* Segurança para não colar no chão */
+    z-index: 20;
+    /* Texto sempre acima da imagem se houver overlap */
 }
 
 .hero-title {
@@ -135,28 +145,40 @@
 .hero-image-wrapper {
     flex: 1 1 50% !important;
     width: 50% !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    position: relative;
-    height: 100%;
+    position: relative !important;
+    /* Referência para o absolute */
+    /* Não usamos flex center aqui, pois a imagem será absolute bottom */
 }
 
 .image-box {
-    position: relative;
+    position: absolute !important;
+    /* Requisito Obrigatório */
+    bottom: 0 !important;
+    /* Requisito Obrigatório */
+    left: 50% !important;
+    /* Requisito Obrigatório */
+    transform: translateX(-50%) !important;
+    /* Requisito Obrigatório */
     width: 100%;
-    max-width: 500px;
+    max-width: 560px;
+    /* Limite de largura da imagem */
     display: flex;
+    align-items: flex-end;
+    /* Garante que a img dentro alinhe embaixo */
     justify-content: center;
+    z-index: 10;
 }
 
 .hero-profile-img {
     width: 100%;
     height: auto;
+    max-height: 85vh;
+    /* Impede que a imagem estoure a tela verticalmente */
     object-fit: contain;
-    position: relative;
-    z-index: 2;
+    object-position: bottom center;
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+    display: block;
+    /* Remove espaços fantasmas de inline */
 }
 
 .hero-glow {
@@ -168,7 +190,8 @@
     height: 80%;
     background: radial-gradient(circle, rgba(168, 85, 247, 0.5), transparent 70%);
     filter: blur(60px);
-    z-index: 1;
+    z-index: -1;
+    /* Atrás da foto */
     border-radius: 50%;
 }
 
@@ -183,24 +206,48 @@
     }
 
     .hero-content {
-        gap: 1.5rem;
-        /* Menor gap para não separar tanto */
+        min-height: auto;
+        /* Remove altura forçada */
     }
 
     .hero-title {
         font-size: 3.5rem;
     }
+
+    .hero-profile-img {
+        max-height: 60vh;
+        /* Imagem menor em telas médias */
+    }
 }
 
-/* Mobile Real (900px e abaixo) - FOTO EMBAIXO DO TEXTO */
+/* Mobile Real (900px e abaixo) */
 @media screen and (max-width: 900px) {
+    .hero {
+        display: block;
+        /* Volta ao fluxo normal */
+        height: auto;
+        min-height: 100vh;
+        padding-bottom: 0;
+        /* Imagem encosta no chão */
+    }
+
+    .hero-container {
+        height: 100%;
+        min-height: 100vh;
+        padding-bottom: 0;
+    }
+
     .hero-content {
         flex-direction: column !important;
-        /* Stack vertical */
-        justify-content: center !important;
-        gap: 3rem;
-        padding-bottom: 4rem;
+        justify-content: flex-start !important;
+        /* Começa do topo */
+        gap: 2rem;
+        padding-top: 40px;
+        /* Espaço pro header */
         text-align: center;
+        position: relative;
+        height: 100%;
+        min-height: 100vh;
     }
 
     .hero-text-wrapper {
@@ -208,23 +255,41 @@
         max-width: 100%;
         align-items: center !important;
         text-align: center !important;
-        flex: auto !important;
-        order: 1;
-        /* Texto PRIMEIRO */
+        flex: 0 0 auto !important;
+        /* Altura automática baseada no conteúdo */
+        padding-bottom: 450px;
+        /* ESPAÇO RESERVADO PARA A IMAGEM EMBAIXO */
+        position: relative;
+        z-index: 20;
     }
 
     .hero-image-wrapper {
         width: 100% !important;
-        flex: auto !important;
-        margin-bottom: 1rem;
-        justify-content: center !important;
-        order: 2;
-        /* Imagem DEPOIS (embaixo) */
+        flex: 0 0 auto !important;
+        position: absolute !important;
+        /* Sai do fluxo no mobile também para garantir bottom: 0 */
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: auto !important;
+        pointer-events: none;
+        /* Permite clicar no texto se houver overlap */
     }
 
     .image-box {
-        max-width: 320px;
-        /* Imagem menorzinha no mobile */
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 100%;
+        max-width: 380px;
+        /* Tamanho da imagem no mobile */
+        pointer-events: all;
+    }
+
+    .hero-profile-img {
+        max-height: 50vh;
+        /* Ocupa até metade da tela no máx */
     }
 
     .hero-buttons {
@@ -239,9 +304,16 @@
     .hero-title {
         font-size: 2.5rem;
     }
+}
 
-    .hero {
-        min-height: auto;
-        padding: 120px 0 80px 0;
+/* Mobile Pequeno (ajuste para telas muito curtas) */
+@media screen and (max-height: 700px) {
+    .hero-text-wrapper {
+        padding-bottom: 350px;
+        /* Menos espaço reservado */
+    }
+
+    .hero-profile-img {
+        max-height: 45vh;
     }
 }

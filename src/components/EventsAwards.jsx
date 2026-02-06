@@ -53,6 +53,9 @@ const EventsAwards = () => {
 
     // Determine event type icon and label
     const getEventTypeInfo = (event) => {
+        if (event.icon) {
+            return { icon: event.icon, label: event.type || 'Evento', cssClass: 'custom' };
+        }
         const type = event.type?.toLowerCase() || 'event';
         if (type === 'award' || type === 'certificate') {
             return { icon: '🏆', label: 'Premiação', cssClass: 'award' };

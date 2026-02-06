@@ -10,7 +10,10 @@ const Events = () => {
         description: '',
         date: '',
         type: 'Event',
-        award: ''
+        icon: '',
+        award: '',
+        image: '',
+        images: []
     });
 
     const types = ['Event', 'Hackathon', 'Award', 'Certificate', 'Other'];
@@ -20,13 +23,18 @@ const Events = () => {
 
         if (editingId) {
             setEvents(events.map(event =>
-                event.id === editingId ? { ...event, ...formData } : event
+                event.id === editingId ? {
+                    ...event,
+                    ...formData,
+                    image: formData.images && formData.images.length > 0 ? formData.images[0] : formData.image
+                } : event
             ));
             setEditingId(null);
         } else {
             const newEvent = {
                 id: Date.now(),
-                ...formData
+                ...formData,
+                image: formData.images && formData.images.length > 0 ? formData.images[0] : formData.image
             };
             setEvents([newEvent, ...events]);
         }
@@ -40,10 +48,14 @@ const Events = () => {
             description: event.description,
             date: event.date,
             type: event.type || 'Event',
-            award: event.award || ''
+            icon: event.icon || '',
+            award: event.award || '',
+            image: event.image || '',
+            images: event.images || (event.image ? [event.image] : [])
         });
         setEditingId(event.id);
         setIsAdding(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleDelete = (id) => {
@@ -53,7 +65,7 @@ const Events = () => {
     };
 
     const resetForm = () => {
-        setFormData({ title: '', description: '', date: '', type: 'Event', award: '' });
+        setFormData({ title: '', description: '', date: '', type: 'Event', icon: '', award: '', image: '', images: [] });
         setIsAdding(false);
         setEditingId(null);
     };
@@ -109,6 +121,17 @@ const Events = () => {
                             </div>
 
                             <div className="form-group">
+                                <label>Ícone / Emoji</label>
+                                <input
+                                    type="text"
+                                    value={formData.icon}
+                                    onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                                    placeholder="Ex: 🚀, 🏆"
+                                    className="form-input"
+                                />
+                            </div>
+
+                            <div className="form-group">
                                 <label>Data</label>
                                 <input
                                     type="date"
@@ -143,6 +166,77 @@ const Events = () => {
                             />
                         </div>
 
+                        <div className="form-group">
+                            <label>Fotos do Evento (para Carrossel)</label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={(e) => {
+                                    const files = Array.from(e.target.files);
+                                    if (files.length > 0) {
+                                        const newImages = [];
+                                        let processedCount = 0;
+
+                                        files.forEach(file => {
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => {
+                                                newImages.push(reader.result);
+                                                processedCount++;
+                                                if (processedCount === files.length) {
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        images: [...(prev.images || []), ...newImages],
+                                                        image: prev.image || newImages[0]
+                                                    }));
+                                                }
+                                            };
+                                            reader.readAsDataURL(file);
+                                        });
+                                    }
+                                }}
+                                className="form-input"
+                            />
+                            <div className="image-preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '10px', marginTop: '10px' }}>
+                                {formData.images && formData.images.map((img, index) => (
+                                    <div key={index} className="image-preview-item" style={{ position: 'relative' }}>
+                                        <img src={img} alt={`Preview ${index}`} style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '4px' }} />
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                const newImages = formData.images.filter((_, i) => i !== index);
+                                                setFormData({
+                                                    ...formData,
+                                                    images: newImages,
+                                                    image: index === 0 ? (newImages[0] || '') : formData.image
+                                                });
+                                            }}
+                                            className="btn-remove-image"
+                                            style={{
+                                                position: 'absolute',
+                                                top: '-5px',
+                                                right: '-5px',
+                                                background: 'red',
+                                                color: 'white',
+                                                border: 'none',
+                                                borderRadius: '50%',
+                                                width: '20px',
+                                                height: '20px',
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: '12px'
+                                            }}
+                                        >
+                                            ×
+                                        </button>
+                                        {index === 0 && <span style={{ position: 'absolute', bottom: '0', left: '0', background: 'rgba(0,0,0,0.7)', color: 'white', fontSize: '10px', padding: '2px 4px', borderTopRightRadius: '4px' }}>Capa</span>}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         <div className="form-actions">
                             <button type="submit" className="btn btn-primary">
                                 {editingId ? 'Salvar' : 'Adicionar'}
@@ -171,6 +265,11 @@ const Events = () => {
                             )}
                         </div>
                         <p className="event-description">{event.description}</p>
+                        {event.images && event.images.length > 0 && (
+                            <div style={{ marginTop: '10px', fontSize: '12px', color: '#888' }}>
+                                📷 {event.images.length} foto(s)
+                            </div>
+                        )}
                         <div className="event-actions">
                             <button onClick={() => handleEdit(event)} className="btn-small">
                                 ✏️ Editar

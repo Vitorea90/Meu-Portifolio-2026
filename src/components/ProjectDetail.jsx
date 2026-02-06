@@ -99,10 +99,7 @@ const ProjectDetail = ({ projectId }) => {
                     </>
                 )}
 
-                <div className="hero-content">
-                    <div className="detail-nav-header">
-                    </div>
-                </div>
+
             </section>
 
             {/* Content Sections */}

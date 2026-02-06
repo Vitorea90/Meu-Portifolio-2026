@@ -22,8 +22,9 @@
 }
 
 .timeline-item {
+    position: relative;
     width: 100%;
-    justify-content: center;
+    min-height: 120px;
     padding-bottom: var(--spacing-3xl);
 }
 
@@ -31,6 +32,8 @@
 .timeline-marker {
     position: absolute;
     left: 50%;
+    top: 0;
+    /* Ensure top alignment */
     transform: translateX(-50%);
     width: auto;
     padding: 0;
@@ -40,11 +43,19 @@
 .marker-dot {
     width: 60px;
     height: 60px;
-    background: var(--color-bg-primary);
-    /* Match bg to hide line behind */
+    background: var(--color-bg-secondary);
+    /* Better contrast */
     border: 3px solid var(--color-primary);
-    box-shadow: 0 0 0 5px rgba(var(--color-bg-primary-rgb), 1);
-    /* Fake separation */
+    border-radius: 50%;
+    /* Ensure circular if desired, or 12px for soft box */
+    border-radius: 16px;
+    box-shadow: 0 0 0 8px var(--color-bg-primary);
+    /* Use bg color to create 'gap' effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    z-index: 10;
 }
 
 /* Content Alternating */
@@ -82,20 +93,26 @@
     content: '';
     position: absolute;
     top: 30px;
-    right: -2px;
-    width: 50px;
+    right: -20px;
+    /* Reduced gap */
+    width: 70px;
+    /* Longer line to reach spine */
     height: 2px;
-    background: var(--color-border-light);
+    background: linear-gradient(to right, var(--color-border-light), var(--color-primary));
+    opacity: 0.5;
 }
 
 .timeline-item:nth-child(even) .timeline-content::after {
     content: '';
     position: absolute;
     top: 30px;
-    left: -2px;
-    width: 50px;
+    left: -20px;
+    /* Reduced gap */
+    width: 70px;
+    /* Longer line to reach spine */
     height: 2px;
-    background: var(--color-border-light);
+    background: linear-gradient(to left, var(--color-border-light), var(--color-primary));
+    opacity: 0.5;
 }
 
 .event-award-badge {

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './EventDetail.css';
 
 const EventDetail = ({ eventId }) => {
     const [event, setEvent] = useState(null);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
         const events = JSON.parse(localStorage.getItem('portfolio_events') || '[]');
@@ -16,6 +17,9 @@ const EventDetail = ({ eventId }) => {
     };
 
     const getEventTypeInfo = (event) => {
+        if (event?.icon) {
+            return { icon: event.icon, label: event.type || 'Evento', cssClass: 'custom' };
+        }
         const type = event?.type?.toLowerCase() || 'event';
         if (type === 'award' || type === 'certificate') {
             return { icon: '🏆', label: 'Premiação', cssClass: 'award', color: '#ffd700' };
@@ -46,6 +50,18 @@ const EventDetail = ({ eventId }) => {
 
     const typeInfo = getEventTypeInfo(event);
 
+    const images = event.images && event.images.length > 0
+        ? event.images
+        : (event.image ? [event.image] : []);
+
+    const nextImage = () => {
+        setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    };
+
+    const prevImage = () => {
+        setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    };
+
     // Split title to highlight last word
     const titleWords = event.title.split(' ');
     const lastWord = titleWords.pop();
@@ -53,26 +69,68 @@ const EventDetail = ({ eventId }) => {
 
     return (
         <div className="event-detail-page">
-            {/* Hero Section */}
-            <motion.section
-                className={`event-hero ${typeInfo.cssClass}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8 }}
-            >
-                <div className="event-hero-overlay"></div>
-                <div className="event-hero-content">
-                    <div className="detail-nav-header">
-                    </div>
+            {/* Hero Section (Carousel) */}
+            <section className="event-hero">
+                {images.length > 0 ? (
+                    <>
+                        {/* Blur Background */}
+                        <AnimatePresence mode="popLayout">
+                            <motion.div
+                                key={`blur-${currentImageIndex}`}
+                                className="hero-blur-bg"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.8 }}
+                                style={{ backgroundImage: `url(${images[currentImageIndex]})` }}
+                            />
+                        </AnimatePresence>
 
-                    <div className="detail-nav-header">
+                        <div className="hero-overlay-gradient"></div>
+
+                        {/* Main Image Container */}
+                        <div className="hero-main-container">
+                            <AnimatePresence mode='wait'>
+                                <motion.img
+                                    key={currentImageIndex}
+                                    src={images[currentImageIndex]}
+                                    alt={`Event visualization ${currentImageIndex + 1}`}
+                                    className="hero-image-slide"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 1.05 }}
+                                    transition={{ duration: 0.4 }}
+                                />
+                            </AnimatePresence>
+                        </div>
+
+                        {images.length > 1 && (
+                            <>
+                                <button className="carousel-btn prev" onClick={prevImage}>❮</button>
+                                <button className="carousel-btn next" onClick={nextImage}>❯</button>
+                                <div className="carousel-indicators">
+                                    {images.map((_, index) => (
+                                        <span
+                                            key={index}
+                                            className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
+                                            onClick={() => setCurrentImageIndex(index)}
+                                        />
+                                    ))}
+                                </div>
+                            </>
+                        )}
+                    </>
+                ) : (
+                    // Fallback if no images
+                    <div className="hero-overlay-gradient" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <h1 style={{ color: 'rgba(255,255,255,0.1)', fontSize: '5rem' }}>No Images</h1>
                     </div>
-                </div>
-            </motion.section>
+                )}
+            </section>
 
             {/* Content Sections */}
             <div className="event-content-wrapper">
-                {/* Header Section (Moved from Hero) */}
+                {/* Header Section */}
                 <motion.div
                     className="event-header-section"
                     initial={{ opacity: 0, y: 20 }}
@@ -90,6 +148,7 @@ const EventDetail = ({ eventId }) => {
                         {restOfTitle} <span className={`highlight-event-inline ${typeInfo.cssClass}`}>{lastWord}</span>
                     </h1>
                 </motion.div>
+
                 {/* Description Section */}
                 <motion.section
                     className="event-section"

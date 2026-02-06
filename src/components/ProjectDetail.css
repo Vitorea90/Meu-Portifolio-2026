@@ -46,7 +46,8 @@
 
 /* Inline Header Section */
 .project-header-section {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+    /* Mais espaço antes do conteúdo principal */
     text-align: left;
 }
 
@@ -54,7 +55,8 @@
     font-size: 3rem;
     font-weight: 800;
     line-height: 1.1;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    /* Mais espaço abaixo do título */
     color: var(--text-primary);
     background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.7));
     background-clip: text;
@@ -181,7 +183,8 @@
 .project-content-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: var(--spacing-xxl) var(--spacing-xl);
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    /* Mais respiro no topo e rodapé */
 }
 
 .project-section {
@@ -265,6 +268,8 @@
     padding: var(--spacing-xl);
     text-decoration: none;
     transition: all 0.3s ease;
+    margin-top: var(--spacing-xl);
+    /* Abaixando um pouco como solicitado */
 }
 
 .github-link-large:hover {
@@ -421,6 +426,9 @@
     position: relative;
     z-index: 5;
     width: 100%;
+    max-width: 1200px;
+    /* Centraliza limitando a largura igual ao conteúdo */
+    margin: 0 auto;
     height: 100%;
     display: flex;
     align-items: center;
@@ -430,14 +438,16 @@
 }
 
 .hero-image-slide {
-    max-width: 98%;
+    max-width: 100%;
+    /* Permite que ocupe até 100% se necessário, mas contido pelo container */
     max-height: 95%;
     object-fit: contain;
     border-radius: 8px;
-    /* Slightly smaller radius for bigger image look */
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-    /* Stronger shadow for pop */
-    /* No absolute positioning here to let flux layout center it */
+    display: block;
+    /* Garante comportamento de bloco */
+    margin: 0 auto;
+    /* Centraliza horizontalmente */
 }
 
 /* Controls */

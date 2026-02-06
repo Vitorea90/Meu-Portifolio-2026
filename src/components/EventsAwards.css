@@ -129,41 +129,52 @@
 
 @media (max-width: 768px) {
     .timeline::before {
-        left: 30px;
-        /* Original left position */
+        left: 25px;
+        /* Aligned with center of 50px marker area */
         transform: none;
     }
 
     .timeline-item {
+        display: flex;
+        /* Flex layout for side-by-side alignment */
+        align-items: flex-start;
+        gap: 15px;
         justify-content: flex-start;
+        padding-bottom: var(--spacing-xl);
     }
 
     .timeline-marker {
-        position: relative;
-        left: 0;
+        position: static;
+        /* Remove absolute positioning */
+        left: auto;
         transform: none;
-        width: 80px;
+        width: 50px;
+        /* Fixed width for alignment */
+        flex-shrink: 0;
         display: flex;
         justify-content: center;
+        margin-top: 5px;
     }
 
     .marker-dot {
-        width: 50px;
-        height: 50px;
-        font-size: var(--font-size-xl);
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        margin: 0;
+        box-shadow: 0 0 0 4px var(--color-bg-primary);
     }
 
     .timeline-content,
     .timeline-item:nth-child(odd) .timeline-content,
     .timeline-item:nth-child(even) .timeline-content {
-        width: 100%;
-        margin: 0;
-        text-align: left;
-        padding-left: 0;
-        padding-right: 0;
+        width: auto;
         flex: 1;
+        margin: 0 !important;
+        text-align: left !important;
+        padding: 0 !important;
     }
 
+    /* Remove connecting lines on mobile */
     .timeline-item:nth-child(odd) .timeline-content::after,
     .timeline-item:nth-child(even) .timeline-content::after {
         display: none;
@@ -178,6 +189,6 @@
     }
 
     .timeline-title {
-        font-size: var(--font-size-xl);
+        font-size: 1.25rem;
     }
 }

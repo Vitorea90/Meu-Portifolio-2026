@@ -1,0 +1,504 @@
+/* Project Detail Page - TraceFarm Inspired Design */
+.project-detail-page {
+    min-height: 100vh;
+    background: #1a2332;
+}
+
+/* Hero Section */
+.project-hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 0 var(--spacing-xl);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(26, 35, 50, 0.95) 0%, rgba(26, 35, 50, 0.85) 50%, rgba(26, 35, 50, 0.9) 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: var(--spacing-xxl) 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+/* Logo Navigation */
+.detail-nav-header {
+    margin-bottom: var(--spacing-xxl);
+}
+
+/* Inline Header Section */
+.project-header-section {
+    margin-bottom: var(--spacing-xl);
+    text-align: left;
+}
+
+.project-page-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.7));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.project-category-inline {
+    display: inline-block;
+    color: var(--color-primary-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--spacing-sm);
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+.highlight-inline {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.logo-text.clickable {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    cursor: pointer;
+    background: linear-gradient(135deg, white 0%, rgba(255, 255, 255, 0.8) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+    display: inline-block;
+    letter-spacing: -0.02em;
+}
+
+.logo-text.clickable:hover {
+    transform: scale(1.05);
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.project-category {
+    display: inline-block;
+    color: var(--color-primary-light);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    margin-bottom: var(--spacing-md);
+}
+
+.project-hero-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-lg);
+    max-width: 900px;
+}
+
+.project-hero-title .highlight {
+    color: var(--color-primary-light);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.project-hero-description {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.8;
+    max-width: 700px;
+    margin-bottom: var(--spacing-xl);
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.btn-hero {
+    padding: 16px 32px;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-hero.primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+}
+
+.btn-hero.primary:hover {
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-hero.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.btn-hero.secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Content Sections */
+.project-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-xxl) var(--spacing-xl);
+}
+
+.project-section {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.section-title-detail {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 12px;
+}
+
+.section-title-detail::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--color-primary);
+}
+
+.section-text {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.8;
+    max-width: 800px;
+}
+
+/* Tech Grid */
+.tech-grid-detail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    /* Increased gap for better spacing */
+    margin-top: var(--spacing-lg);
+}
+
+.tech-item-detail {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    /* More horizontal padding */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    min-width: 140px;
+    /* Ensure they aren't too tiny */
+}
+
+.tech-item-detail:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(99, 102, 241, 0.5);
+    transform: translateY(-2px);
+}
+
+.tech-icon {
+    color: var(--color-primary-light);
+    font-size: 1.2rem;
+}
+
+.tech-name {
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* GitHub Link Large */
+.github-link-large {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.github-link-large:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.github-link-large svg {
+    color: white;
+    flex-shrink: 0;
+}
+
+.github-link-large>div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.github-title {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.github-desc {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+}
+
+.github-arrow {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.5rem;
+}
+
+/* Error State */
+.project-detail-error {
+    text-align: center;
+    padding: var(--spacing-xxl);
+    margin: 100px auto;
+}
+
+.project-detail-error h2 {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: var(--spacing-lg);
+}
+
+.btn-back-error {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-back-error:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .project-hero-title {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-hero {
+        min-height: 70vh;
+        padding: 0 var(--spacing-md);
+    }
+
+    .project-hero-title {
+        font-size: 2.5rem;
+    }
+
+    .project-hero-description {
+        font-size: 1.1rem;
+    }
+
+    .hero-actions {
+        flex-direction: column;
+    }
+
+    .btn-hero {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .project-content-wrapper {
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
+
+    .tech-grid-detail {
+        grid-template-columns: 1fr;
+    }
+
+    .github-link-large {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .github-arrow {
+        display: none;
+    }
+}
+
+/* Carousel / Gallery Styles */
+.project-hero {
+    position: relative;
+    /* Reduced height as requested 'less background/more prominent' - but still large enough for gallery */
+    height: 80vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0;
+    /* Reset background props as we use internal divs now */
+    background: #0f172a;
+}
+
+.hero-blur-bg {
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(30px) brightness(0.4);
+    z-index: 0;
+    opacity: 0.5;
+}
+
+.hero-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(15, 23, 42, 0.8) 100%);
+    z-index: 1;
+}
+
+.hero-main-container {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm);
+    /* Reduced padding */
+}
+
+.hero-image-slide {
+    max-width: 98%;
+    max-height: 95%;
+    object-fit: contain;
+    border-radius: 8px;
+    /* Slightly smaller radius for bigger image look */
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    /* Stronger shadow for pop */
+    /* No absolute positioning here to let flux layout center it */
+}
+
+/* Controls */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 23, 42, 0.6);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* ... keep indicators ... */
+
+.carousel-btn.prev {
+    left: 20px;
+}
+
+.carousel-btn.next {
+    right: 20px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.indicator {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background: var(--color-primary);
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}

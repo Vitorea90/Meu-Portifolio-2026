@@ -1,0 +1,227 @@
+/* ==========================================================================
+   HERO SECTION - BULLETPROOF FLEX LAYOUT
+   ========================================================================== */
+
+/* 1. Base Container */
+.hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding-top: 80px;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a24 100%);
+}
+
+.hero-bg-accent {
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
+    filter: blur(80px);
+    z-index: 0;
+    animation: pulse-bg 10s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-bg {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* 2. Layout Wrapper */
+.hero-container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 10;
+    display: block;
+    /* Limpa comportamentos estranhos */
+}
+
+/* 3. FLEX CONTENT - FORCED ROW */
+.hero-content {
+    display: flex !important;
+    flex-direction: row !important;
+    /* Força lado a lado */
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 2rem;
+    width: 100%;
+    min-height: 600px;
+}
+
+/* 4. Coluna de Texto (Esquerda) */
+.hero-text-wrapper {
+    flex: 1 1 50% !important;
+    /* Ocupa 50% forçadamente */
+    width: 50% !important;
+    max-width: 600px;
+    /* Limite de segurança */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    /* Responsivo fluido */
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 1.5rem;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: #cbd5e1;
+    margin-bottom: 2.5rem;
+    max-width: 90%;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.hero-socials {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.social-link {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background: #6366f1;
+    border-color: #6366f1;
+    transform: translateY(-3px);
+}
+
+.social-link img {
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: brightness(0) invert(1);
+}
+
+/* 5. Coluna de Imagem (Direita) */
+.hero-image-wrapper {
+    flex: 1 1 50% !important;
+    /* Ocupa 50% forçadamente */
+    width: 50% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative;
+    height: 100%;
+}
+
+.image-box {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-profile-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+}
+
+.hero-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.5), transparent 70%);
+    filter: blur(60px);
+    z-index: 1;
+    border-radius: 50%;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (MOBILE REAL)
+   ========================================================================== */
+
+/* Só ativa se a tela for explicitamente menor que 900px */
+@media screen and (max-width: 900px) {
+    .hero-content {
+        flex-direction: column-reverse !important;
+        /* Inverte direção */
+        display: flex !important;
+        justify-content: center !important;
+        gap: 3rem;
+        padding-bottom: 4rem;
+        text-align: center;
+    }
+
+    .hero-text-wrapper {
+        width: 100% !important;
+        align-items: center !important;
+        text-align: center !important;
+        flex: auto !important;
+    }
+
+    .hero-image-wrapper {
+        width: 100% !important;
+        flex: auto !important;
+        margin-bottom: 1rem;
+        justify-content: center !important;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .hero-socials {
+        justify-content: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    /* Ajuste de altura no mobile */
+    .hero {
+        min-height: auto;
+        padding: 100px 0 60px 0;
+    }
+}

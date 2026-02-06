@@ -11,23 +11,26 @@ export const useVercelData = (type, initialValue) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        let isMounted = true;
+
         const fetchData = async () => {
             try {
                 const response = await fetch(`/api/data?type=${type}`);
                 if (response.ok) {
                     const cloudData = await response.json();
-                    if (cloudData && cloudData.length > 0) {
+                    if (isMounted && Array.isArray(cloudData) && cloudData.length > 0) {
                         setData(cloudData);
                     }
                 }
             } catch (error) {
                 console.error(`Error fetching ${type} from Vercel:`, error);
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
 
         fetchData();
+        return () => { isMounted = false; };
     }, [type]);
 
     const saveData = async (newData) => {

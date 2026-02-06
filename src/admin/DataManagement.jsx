@@ -71,6 +71,32 @@ const DataManagement = () => {
         }
     };
 
+    const handleSyncFromLocal = async () => {
+        try {
+            // Import here to avoid issues if not needed
+            const dataModule = await import('../data/portfolio-data');
+            const localData = {
+                projects: dataModule.featuredProjects,
+                events: dataModule.eventsAndAwards,
+                skills: dataModule.skills
+            };
+
+            if (window.confirm('Isso copiará todos os dados do arquivo local (portfolio-data.js) para o Vercel Postgres, substituindo os dados existentes na nuvem. Deseja continuar?')) {
+                setIsInitializing(true);
+                if (localData.projects) await setProjects(localData.projects);
+                if (localData.events) await setEvents(localData.events);
+                if (localData.skills) await setSkills(localData.skills);
+
+                alert('Sincronização concluída com sucesso!');
+            }
+        } catch (error) {
+            console.error('Erro na sincronização:', error);
+            alert('Erro ao carregar dados locais: ' + error.message);
+        } finally {
+            setIsInitializing(false);
+        }
+    };
+
     return (
         <div className="admin-section">
             <div className="section-header">
@@ -92,9 +118,16 @@ const DataManagement = () => {
                     onClick={handleInitDB}
                     className="btn btn-secondary"
                     disabled={isInitializing}
-                    style={{ background: '#333', borderColor: '#444' }}
+                    style={{ background: '#333', borderColor: '#444', marginRight: '1rem' }}
                 >
-                    {isInitializing ? 'Inicializando...' : 'Inicializar Tabelas no Banco'}
+                    {isInitializing ? 'Processando...' : 'Re-inicializar Tabelas'}
+                </button>
+                <button
+                    onClick={handleSyncFromLocal}
+                    className="btn btn-primary"
+                    disabled={isInitializing}
+                >
+                    {isInitializing ? 'Sincronizando...' : 'Sincronizar com Dados Locais'}
                 </button>
             </div>
             <div style={{ marginBottom: '2rem' }}>

@@ -27,7 +27,8 @@ export default async function handler(request, response) {
 
             return response.status(200).json(items);
         } catch (error) {
-            return response.status(500).json({ error: error.message });
+            console.error('API Error:', error);
+            return response.status(200).json([]);
         }
     }
 
@@ -36,33 +37,34 @@ export default async function handler(request, response) {
             const { items } = request.body;
 
             if (type === 'projects') {
-                await sql`DELETE FROM projects;`; // Standardizing on replacement for now as per local storage behavior
+                await sql`DELETE FROM projects;`;
                 for (const item of items) {
                     await sql`
-            INSERT INTO projects (title, description, image, images, tech_stack, link, github)
-            VALUES (${item.title}, ${item.description}, ${item.image}, ${item.images || []}, ${item.techStack || []}, ${item.link}, ${item.github});
-          `;
+                        INSERT INTO projects (id, title, description, image, images, tech_stack, link, github)
+                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.image}, ${item.images || []}, ${item.techStack || []}, ${item.link}, ${item.github});
+                    `;
                 }
             } else if (type === 'events') {
                 await sql`DELETE FROM events;`;
                 for (const item of items) {
                     await sql`
-            INSERT INTO events (title, description, date, year, type, award, image, images)
-            VALUES (${item.title}, ${item.description}, ${item.date}, ${item.year}, ${item.type}, ${item.award}, ${item.image}, ${item.images || []});
-          `;
+                        INSERT INTO events (id, title, description, date, year, type, award, image, images)
+                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.date}, ${item.year}, ${item.type}, ${item.award}, ${item.image}, ${item.images || []});
+                    `;
                 }
             } else if (type === 'skills') {
                 await sql`DELETE FROM skills;`;
                 for (const item of items) {
                     await sql`
-            INSERT INTO skills (name, category, icon)
-            VALUES (${item.name}, ${item.category}, ${item.icon});
-          `;
+                        INSERT INTO skills (id, name, category, icon)
+                        VALUES (${item.id || Date.now()}, ${item.name}, ${item.category}, ${item.icon});
+                    `;
                 }
             }
 
             return response.status(200).json({ message: 'Data saved successfully' });
         } catch (error) {
+            console.error('Error saving data:', error);
             return response.status(500).json({ error: error.message });
         }
     }

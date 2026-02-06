@@ -1,48 +1,51 @@
 import React, { useRef } from 'react';
+import { useFirebaseProjects, useFirebaseEvents, useFirebaseSkills } from '../hooks/useFirebase';
 
 const DataManagement = () => {
     const fileInputRef = useRef(null);
+    const [projects, setProjects] = useFirebaseProjects();
+    const [events, setEvents] = useFirebaseEvents();
+    const [skills, setSkills] = useFirebaseSkills();
 
     const handleExport = () => {
         const data = {
-            events: JSON.parse(localStorage.getItem('portfolio_events') || '[]'),
-            projects: JSON.parse(localStorage.getItem('portfolio_projects') || '[]'),
-            skills: JSON.parse(localStorage.getItem('portfolio_skills') || '[]'),
-            submissions: JSON.parse(localStorage.getItem('portfolio_submissions') || '[]')
+            events,
+            projects,
+            skills,
+            submissions: JSON.parse(localStorage.getItem('portfolio_submissions') || '[]'),
+            exportedAt: new Date().toISOString()
         };
 
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `portfolio-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        a.download = `portfolio-firebase-backup-${new Date().toISOString().slice(0, 10)}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     };
 
-    const handleImport = (e) => {
+    const handleImport = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
             try {
                 const data = JSON.parse(event.target.result);
 
-                if (window.confirm('Isso substituirá todos os dados atuais. Deseja continuar?')) {
-                    if (data.events) localStorage.setItem('portfolio_events', JSON.stringify(data.events));
-                    if (data.projects) localStorage.setItem('portfolio_projects', JSON.stringify(data.projects));
-                    if (data.skills) localStorage.setItem('portfolio_skills', JSON.stringify(data.skills));
-                    if (data.submissions) localStorage.setItem('portfolio_submissions', JSON.stringify(data.submissions));
+                if (window.confirm('Isso substituirá todos os dados na NUVEM (Firebase). Deseja continuar?')) {
+                    if (data.events) await setEvents(data.events);
+                    if (data.projects) await setProjects(data.projects);
+                    if (data.skills) await setSkills(data.skills);
 
-                    alert('Dados importados com sucesso! A página será recarregada.');
-                    window.location.reload();
+                    alert('Dados sincronizados com a nuvem com sucesso!');
                 }
             } catch (error) {
                 console.error('Erro ao importar dados:', error);
-                alert('Erro ao ler o arquivo. Verifique se é um backup válido.');
+                alert('Erro ao ler o arquivo ou sincronizar com Firebase.');
             }
         };
         reader.readAsText(file);
@@ -51,7 +54,28 @@ const DataManagement = () => {
     return (
         <div className="admin-section">
             <div className="section-header">
-                <h2 className="section-title">Gerenciamento de Dados</h2>
+                <h2 className="section-title">Nuvem & Backup</h2>
+            </div>
+
+            <div className="firebase-setup-guide" style={{
+                background: 'rgba(99, 102, 241, 0.1)',
+                padding: '1.5rem',
+                borderRadius: '12px',
+                border: '1px solid rgba(99, 102, 241, 0.3)',
+                marginBottom: '2rem',
+                color: 'white'
+            }}>
+                <h3 style={{ marginBottom: '1rem' }}>🔥 Configuração do Banco de Dados</h3>
+                <p style={{ fontSize: '0.9rem', marginBottom: '1rem', opacity: 0.9 }}>
+                    O sistema está pronto para usar o Firebase. Para ativar a sincronização entre dispositivos, você precisa colar suas chaves em: <br />
+                    <code>src/firebase/config.js</code>
+                </p>
+                <ol style={{ fontSize: '0.85rem', paddingLeft: '1.2rem', lineHeight: '1.6' }}>
+                    <li>Vá ao <a href="https://console.firebase.google.com/" target="_blank" rel="noreferrer" style={{ color: '#6366f1' }}>Console do Firebase</a></li>
+                    <li>Crie um projeto e adicione um "Web App"</li>
+                    <li>Copie o objeto <code>firebaseConfig</code></li>
+                    <li>Crie um banco de dados <b>Firestore</b> em "Produção" ou "Modo Teste"</li>
+                </ol>
             </div>
 
             <div className="data-management-card" style={{
@@ -61,21 +85,19 @@ const DataManagement = () => {
                 border: '1px solid rgba(255, 255, 255, 0.1)'
             }}>
                 <div style={{ marginBottom: '2rem' }}>
-                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>📤 Exportar Dados (Backup)</h3>
+                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>📤 Exportar da Nuvem</h3>
                     <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
-                        Baixe um arquivo contendo todos os seus projetos, eventos e habilidades.
-                        Use isso para salvar suas alterações ou transferir dados do Localhost para o site ao vivo.
+                        Baixe uma cópia de segurança de tudo o que está salvo atualmente no Firebase.
                     </p>
                     <button onClick={handleExport} className="btn btn-primary">
-                        Baixar Backup
+                        Baixar Backup JSON
                     </button>
                 </div>
 
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
-                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>📥 Importar Dados</h3>
+                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>📥 Sincronizar Arquivo com Nuvem</h3>
                     <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
-                        Carregue um arquivo de backup para restaurar seus dados.
-                        <strong>Atenção:</strong> Isso substituirá os dados atuais deste navegador.
+                        Suba um backup antigo para atualizar instantaneamente o banco de dados na nuvem.
                     </p>
                     <input
                         type="file"
@@ -89,7 +111,7 @@ const DataManagement = () => {
                         className="btn btn-secondary"
                         style={{ border: '1px solid rgba(255,255,255,0.2)' }}
                     >
-                        Selecionar Arquivo e Importar
+                        Importar para o Firebase
                     </button>
                 </div>
             </div>

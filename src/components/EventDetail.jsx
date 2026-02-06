@@ -2,29 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './EventDetail.css';
 
-import { eventsAndAwards, publications } from '../data/portfolio-data';
+import { useFirebaseEvents } from '../hooks/useFirebase';
 
 const EventDetail = ({ eventId }) => {
+    const [events, , loading] = useFirebaseEvents();
     const [event, setEvent] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
-        // Try to find in localStorage first
-        const localEvents = JSON.parse(localStorage.getItem('portfolio_events') || '[]');
-        let found = localEvents.find(e => e.id === parseInt(eventId));
-
-        // If not found, check static data
-        if (!found) {
-            found = eventsAndAwards.find(e => e.id === parseInt(eventId));
-
-            // Also check publications for type != 'Projeto' just in case
-            if (!found) {
-                found = publications.find(p => p.id === parseInt(eventId) && p.type !== 'Projeto');
-            }
+        if (!loading && events) {
+            const found = events.find(e => e.id === parseInt(eventId));
+            setEvent(found);
         }
-
-        setEvent(found);
-    }, [eventId]);
+    }, [eventId, events, loading]);
 
     const handleBack = () => {
         window.location.href = '/';

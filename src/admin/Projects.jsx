@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { useProjects } from '../hooks/useLocalStorage';
+import { useFirebaseProjects } from '../hooks/useFirebase';
 
 const Projects = () => {
-    const [projects, setProjects] = useProjects();
+    const [projects, setProjects] = useFirebaseProjects();
     const [isAdding, setIsAdding] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({

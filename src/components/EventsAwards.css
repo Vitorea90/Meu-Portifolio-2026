@@ -13,6 +13,10 @@
 
 /* Central Timeline Spine */
 .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 3px;
@@ -174,10 +178,21 @@
         padding: 0 !important;
     }
 
-    /* Remove connecting lines on mobile */
+    /* Restore/Fix connecting line for mobile (short line to the left) */
     .timeline-item:nth-child(odd) .timeline-content::after,
     .timeline-item:nth-child(even) .timeline-content::after {
-        display: none;
+        display: block;
+        content: '';
+        position: absolute;
+        top: 25px;
+        /* Aligns with marker visual center (5px margin + 20px half height) */
+        left: -15px;
+        /* Span the 15px gap */
+        right: auto;
+        width: 15px;
+        height: 2px;
+        background: var(--color-primary);
+        opacity: 0.5;
     }
 
     .timeline-item:nth-child(odd) .timeline-header {

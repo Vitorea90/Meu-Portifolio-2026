@@ -42,20 +42,20 @@
 /* 2. Layout Wrapper */
 .hero-container {
     width: 100%;
-    max-width: 1280px;
+    max-width: 1200px;
+    /* Reduzi um pouco a largura máxima para monitores ultrawide */
     margin: 0 auto;
     padding: 0 2rem;
     position: relative;
     z-index: 10;
     display: block;
-    /* Limpa comportamentos estranhos */
 }
 
-/* 3. FLEX CONTENT - FORCED ROW */
+/* 3. FLEX CONTENT - DESKTOP FORCE */
 .hero-content {
     display: flex !important;
     flex-direction: row !important;
-    /* Força lado a lado */
+    /* Lado a Lado no Desktop */
     align-items: center !important;
     justify-content: space-between !important;
     gap: 2rem;
@@ -66,10 +66,8 @@
 /* 4. Coluna de Texto (Esquerda) */
 .hero-text-wrapper {
     flex: 1 1 50% !important;
-    /* Ocupa 50% forçadamente */
     width: 50% !important;
     max-width: 600px;
-    /* Limite de segurança */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -77,8 +75,7 @@
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    /* Responsivo fluido */
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
     font-weight: 800;
     line-height: 1.1;
     color: #fff;
@@ -134,10 +131,9 @@
     filter: brightness(0) invert(1);
 }
 
-/* 5. Coluna de Imagem (Direita) */
+/* 5. Coluna de Imagem (Direita - Desktop) */
 .hero-image-wrapper {
     flex: 1 1 50% !important;
-    /* Ocupa 50% forçadamente */
     width: 50% !important;
     display: flex !important;
     justify-content: center !important;
@@ -177,15 +173,30 @@
 }
 
 /* ==========================================================================
-   RESPONSIVIDADE (MOBILE REAL)
+   RESPONSIVIDADE (MOBILE & TABLET)
    ========================================================================== */
 
-/* Só ativa se a tela for explicitamente menor que 900px */
+/* Tablet / Laptop menores (1024px e abaixo) */
+@media screen and (max-width: 1024px) {
+    .hero-container {
+        padding: 0 1.5rem;
+    }
+
+    .hero-content {
+        gap: 1.5rem;
+        /* Menor gap para não separar tanto */
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+    }
+}
+
+/* Mobile Real (900px e abaixo) - FOTO EMBAIXO DO TEXTO */
 @media screen and (max-width: 900px) {
     .hero-content {
-        flex-direction: column-reverse !important;
-        /* Inverte direção */
-        display: flex !important;
+        flex-direction: column !important;
+        /* Stack vertical */
         justify-content: center !important;
         gap: 3rem;
         padding-bottom: 4rem;
@@ -194,9 +205,12 @@
 
     .hero-text-wrapper {
         width: 100% !important;
+        max-width: 100%;
         align-items: center !important;
         text-align: center !important;
         flex: auto !important;
+        order: 1;
+        /* Texto PRIMEIRO */
     }
 
     .hero-image-wrapper {
@@ -204,6 +218,13 @@
         flex: auto !important;
         margin-bottom: 1rem;
         justify-content: center !important;
+        order: 2;
+        /* Imagem DEPOIS (embaixo) */
+    }
+
+    .image-box {
+        max-width: 320px;
+        /* Imagem menorzinha no mobile */
     }
 
     .hero-buttons {
@@ -219,9 +240,8 @@
         font-size: 2.5rem;
     }
 
-    /* Ajuste de altura no mobile */
     .hero {
         min-height: auto;
-        padding: 100px 0 60px 0;
+        padding: 120px 0 80px 0;
     }
 }

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useSkills } from '../hooks/useLocalStorage';
+import { useVercelSkills } from '../hooks/useVercel';
 
 const Skills = () => {
-    const [skills, setSkills] = useSkills();
+    const [skills, setSkills, loading] = useVercelSkills();
     const [isAdding, setIsAdding] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({

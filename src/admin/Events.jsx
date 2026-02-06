@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useEvents } from '../hooks/useLocalStorage';
+import { useVercelEvents } from '../hooks/useVercel';
 
 const Events = () => {
-    const [events, setEvents] = useEvents();
+    const [events, setEvents, loading] = useVercelEvents();
     const [isAdding, setIsAdding] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({

@@ -1,31 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ProjectDetail.css';
-
-import { featuredProjects, publications } from '../data/portfolio-data';
+import { useVercelProjects } from '../hooks/useVercel';
 
 const ProjectDetail = ({ projectId }) => {
     const [project, setProject] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [projects, , loading] = useVercelProjects();
 
     useEffect(() => {
-        // Try to find in localStorage first (dynamic updates)
-        const localProjects = JSON.parse(localStorage.getItem('portfolio_projects') || '[]');
-        let found = localProjects.find(p => p.id === parseInt(projectId));
-
-        // If not found in local dynamic list, check static data (backup)
-        if (!found) {
-            // Check featured projects
-            found = featuredProjects.find(p => p.id === parseInt(projectId));
-
-            // Also check general publications if it might be there (optional, but good for safety)
-            if (!found) {
-                found = publications.find(p => p.id === parseInt(projectId) && p.type === 'Projeto');
-            }
+        if (!loading && projects) {
+            const found = projects.find(p => p.id === parseInt(projectId));
+            setProject(found);
         }
-
-        setProject(found);
-    }, [projectId]);
+    }, [projectId, projects, loading]);
 
     const handleBack = () => {
         window.location.href = '/';

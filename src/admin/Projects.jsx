@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useProjects } from '../hooks/useLocalStorage';
+import { useVercelProjects } from '../hooks/useVercel';
 
 const Projects = () => {
-    const [projects, setProjects] = useProjects();
+    const [projects, setProjects, loading] = useVercelProjects();
     const [isAdding, setIsAdding] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({

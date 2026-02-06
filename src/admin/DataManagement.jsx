@@ -1,14 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import { useVercelProjects, useVercelEvents, useVercelSkills } from '../hooks/useVercel';
 
 const DataManagement = () => {
     const fileInputRef = useRef(null);
+    const [isInitializing, setIsInitializing] = useState(false);
+
+    const [projects, setProjects] = useVercelProjects();
+    const [events, setEvents] = useVercelEvents();
+    const [skills, setSkills] = useVercelSkills();
 
     const handleExport = () => {
         const data = {
-            events: JSON.parse(localStorage.getItem('portfolio_events') || '[]'),
-            projects: JSON.parse(localStorage.getItem('portfolio_projects') || '[]'),
-            skills: JSON.parse(localStorage.getItem('portfolio_skills') || '[]'),
-            submissions: JSON.parse(localStorage.getItem('portfolio_submissions') || '[]')
+            events,
+            projects,
+            skills,
         };
 
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
@@ -22,22 +27,21 @@ const DataManagement = () => {
         URL.revokeObjectURL(url);
     };
 
-    const handleImport = (e) => {
+    const handleImport = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
             try {
                 const data = JSON.parse(event.target.result);
 
-                if (window.confirm('Isso substituirá todos os dados atuais. Deseja continuar?')) {
-                    if (data.events) localStorage.setItem('portfolio_events', JSON.stringify(data.events));
-                    if (data.projects) localStorage.setItem('portfolio_projects', JSON.stringify(data.projects));
-                    if (data.skills) localStorage.setItem('portfolio_skills', JSON.stringify(data.skills));
-                    if (data.submissions) localStorage.setItem('portfolio_submissions', JSON.stringify(data.submissions));
+                if (window.confirm('Isso substituirá todos os dados na nuvem (Vercel Postgres). Deseja continuar?')) {
+                    if (data.projects) await setProjects(data.projects);
+                    if (data.events) await setEvents(data.events);
+                    if (data.skills) await setSkills(data.skills);
 
-                    alert('Dados importados com sucesso! A página será recarregada.');
+                    alert('Dados importados para a nuvem com sucesso! A página será recarregada.');
                     window.location.reload();
                 }
             } catch (error) {
@@ -48,50 +52,82 @@ const DataManagement = () => {
         reader.readAsText(file);
     };
 
+    const handleInitDB = async () => {
+        if (!window.confirm('Deseja inicializar/atualizar as tabelas do banco de dados na Vercel?')) return;
+
+        setIsInitializing(true);
+        try {
+            const response = await fetch('/api/init');
+            const result = await response.json();
+            if (response.ok) {
+                alert('Banco de dados inicializado com sucesso!');
+            } else {
+                alert('Erro ao inicializar: ' + (result.error || 'Erro desconhecido. Você conectou o Postgres no painel da Vercel?'));
+            }
+        } catch (error) {
+            alert('Erro de conexão: ' + error.message);
+        } finally {
+            setIsInitializing(false);
+        }
+    };
+
     return (
         <div className="admin-section">
             <div className="section-header">
-                <h2 className="section-title">Gerenciamento de Dados</h2>
+                <h2 className="section-title">Gerenciamento de Nuvem (Vercel Postgres)</h2>
             </div>
 
             <div className="data-management-card" style={{
                 background: 'rgba(255, 255, 255, 0.05)',
                 padding: '2rem',
                 borderRadius: '12px',
-                border: '1px solid rgba(255, 255, 255, 0.1)'
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                marginBottom: '2rem'
             }}>
-                <div style={{ marginBottom: '2rem' }}>
-                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>📤 Exportar Dados (Backup)</h3>
-                    <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
-                        Baixe um arquivo contendo todos os seus projetos, eventos e habilidades.
-                        Use isso para salvar suas alterações ou transferir dados do Localhost para o site ao vivo.
-                    </p>
-                    <button onClick={handleExport} className="btn btn-primary">
-                        Baixar Backup
-                    </button>
-                </div>
+                <h3 style={{ color: 'white', marginBottom: '1rem' }}>⚙️ Configuração do Banco</h3>
+                <p style={{ color: '#aaa', marginBottom: '1.5rem', lineHeight: '1.6' }}>
+                    Se esta é a primeira vez usando o Vercel Postgres ou se você resetou o banco, use o botão abaixo para criar as tabelas necessárias.
+                </p>
+                <button
+                    onClick={handleInitDB}
+                    className="btn btn-secondary"
+                    disabled={isInitializing}
+                    style={{ background: '#333', borderColor: '#444' }}
+                >
+                    {isInitializing ? 'Inicializando...' : 'Inicializar Tabelas no Banco'}
+                </button>
+            </div>
+            <div style={{ marginBottom: '2rem' }}>
+                <h3 style={{ color: 'white', marginBottom: '1rem' }}>📤 Exportar Dados (Backup)</h3>
+                <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
+                    Baixe um arquivo contendo todos os seus projetos, eventos e habilidades.
+                    Use isso para salvar suas alterações ou transferir dados do Localhost para o site ao vivo.
+                </p>
+                <button onClick={handleExport} className="btn btn-primary">
+                    Baixar Backup
+                </button>
+            </div>
 
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
-                    <h3 style={{ color: 'white', marginBottom: '1rem' }}>📥 Importar Dados</h3>
-                    <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
-                        Carregue um arquivo de backup para restaurar seus dados.
-                        <strong>Atenção:</strong> Isso substituirá os dados atuais deste navegador.
-                    </p>
-                    <input
-                        type="file"
-                        accept=".json"
-                        ref={fileInputRef}
-                        style={{ display: 'none' }}
-                        onChange={handleImport}
-                    />
-                    <button
-                        onClick={() => fileInputRef.current.click()}
-                        className="btn btn-secondary"
-                        style={{ border: '1px solid rgba(255,255,255,0.2)' }}
-                    >
-                        Selecionar Arquivo e Importar
-                    </button>
-                </div>
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
+                <h3 style={{ color: 'white', marginBottom: '1rem' }}>📥 Importar Dados</h3>
+                <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
+                    Carregue um arquivo de backup para restaurar seus dados.
+                    <strong>Atenção:</strong> Isso substituirá os dados atuais deste navegador.
+                </p>
+                <input
+                    type="file"
+                    accept=".json"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleImport}
+                />
+                <button
+                    onClick={() => fileInputRef.current.click()}
+                    className="btn btn-secondary"
+                    style={{ border: '1px solid rgba(255,255,255,0.2)' }}
+                >
+                    Selecionar Arquivo e Importar
+                </button>
             </div>
         </div>
     );

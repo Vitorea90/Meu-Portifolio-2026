@@ -1,47 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { motion, useInView } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion } from 'framer-motion';
 import './EventsAwards.css';
-
-import { eventsAndAwards } from '../data/portfolio-data';
+import { useVercelEvents } from '../hooks/useVercel';
 
 const EventsAwards = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-    // Initialize with static data
-    const [events, setEvents] = useState(eventsAndAwards);
-
-    useEffect(() => {
-        // Load events from localStorage
-        const loadEvents = () => {
-            const localData = localStorage.getItem('portfolio_events');
-            if (localData) {
-                try {
-                    const savedEvents = JSON.parse(localData);
-                    if (Array.isArray(savedEvents)) {
-                        console.log('EventsAwards: Loaded events from localStorage');
-                        setEvents(savedEvents);
-                        return;
-                    }
-                } catch (e) {
-                    console.error('Error parsing events:', e);
-                }
-            }
-            // Fallback
-            setEvents(eventsAndAwards);
-        };
-
-        loadEvents();
-
-        // Listen for storage changes
-        window.addEventListener('storage', loadEvents);
-        window.addEventListener('portfolioDataUpdated', loadEvents);
-
-        return () => {
-            window.removeEventListener('storage', loadEvents);
-            window.removeEventListener('portfolioDataUpdated', loadEvents);
-        };
-    }, []);
+    const [events, , loading] = useVercelEvents();
 
     const containerVariants = {
         hidden: { opacity: 0 },

@@ -18,6 +18,11 @@ export const useLocalStorage = (key, initialValue) => {
             window.dispatchEvent(new Event('portfolioDataUpdated'));
         } catch (error) {
             console.error(`Error saving ${key} to localStorage:`, error);
+            if (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                alert('⚠️ Limite de memória atingido! Sua alteração não foi salva. Tente carregar fotos menores ou remover algumas imagens antigas.');
+            } else {
+                alert('Erro ao salvar no navegador: ' + error.message);
+            }
         }
     }, [key, value]);
 

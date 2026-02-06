@@ -56,9 +56,8 @@
 
 .skill-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    margin-bottom: var(--spacing-xs);
 }
 
 .skill-name {
@@ -67,26 +66,7 @@
     color: var(--color-text-primary);
 }
 
-.skill-percentage {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    color: var(--color-primary);
-}
 
-.skill-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-}
-
-.skill-progress {
-    height: 100%;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-full);
-    transition: width 1s ease-out;
-}
 
 @media (max-width: 768px) {
     .skills-categories {

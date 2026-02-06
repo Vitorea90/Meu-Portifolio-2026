@@ -97,15 +97,6 @@ const Skills = () => {
                                         >
                                             <div className="skill-header">
                                                 <span className="skill-name">{skill.name}</span>
-                                                <span className="skill-percentage">{skill.proficiency}%</span>
-                                            </div>
-                                            <div className="skill-bar">
-                                                <motion.div
-                                                    className="skill-progress"
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${skill.proficiency}%` }}
-                                                    transition={{ duration: 1, delay: 0.2 }}
-                                                />
                                             </div>
                                         </motion.div>
                                     ))}

@@ -39,17 +39,22 @@ export default async function handler(request, response) {
             if (type === 'projects') {
                 await sql`DELETE FROM projects;`;
                 for (const item of items) {
+                    const techStack = Array.isArray(item.techStack) ? item.techStack : [];
+                    const images = Array.isArray(item.images) ? item.images : [];
                     await sql`
                         INSERT INTO projects (id, title, description, image, images, tech_stack, link, github)
-                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.image}, ${item.images || []}, ${item.techStack || []}, ${item.link}, ${item.github});
+                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.image}, ${images}, ${techStack}, ${item.link}, ${item.github});
                     `;
                 }
             } else if (type === 'events') {
                 await sql`DELETE FROM events;`;
                 for (const item of items) {
+                    const images = Array.isArray(item.images) ? item.images : [];
+                    // Extract year from date if year is missing
+                    const year = item.year || (item.date ? new Date(item.date).getFullYear() : '');
                     await sql`
                         INSERT INTO events (id, title, description, date, year, type, award, image, images)
-                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.date}, ${item.year}, ${item.type}, ${item.award}, ${item.image}, ${item.images || []});
+                        VALUES (${item.id}, ${item.title}, ${item.description}, ${item.date}, ${year}, ${item.type}, ${item.award}, ${item.image}, ${images});
                     `;
                 }
             } else if (type === 'skills') {

@@ -129,6 +129,26 @@ const DataManagement = () => {
                 >
                     {isInitializing ? 'Sincronizando...' : 'Sincronizar com Dados Locais'}
                 </button>
+                <button
+                    onClick={async () => {
+                        if (!window.confirm('Deseja aplicar a correção de compatibilidade (BIGINT) no banco de dados? Faça isso se novos itens não estiverem sendo salvos.')) return;
+                        setIsInitializing(true);
+                        try {
+                            const response = await fetch('/api/fix-tables');
+                            const result = await response.json();
+                            alert(result.message || 'Correção aplicada!');
+                        } catch (e) {
+                            alert('Erro: ' + e.message);
+                        } finally {
+                            setIsInitializing(false);
+                        }
+                    }}
+                    className="btn btn-secondary"
+                    style={{ background: '#553311', borderColor: '#774422', marginLeft: '1rem' }}
+                    disabled={isInitializing}
+                >
+                    🛠️ Consertar Banco
+                </button>
             </div>
             <div style={{ marginBottom: '2rem' }}>
                 <h3 style={{ color: 'white', marginBottom: '1rem' }}>📤 Exportar Dados (Backup)</h3>

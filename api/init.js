@@ -1,11 +1,11 @@
 import { sql } from '@vercel/postgres';
 
 export default async function handler(request, response) {
-    try {
-        // Create projects table
-        await sql`
+  try {
+    // Create projects table
+    await sql`
       CREATE TABLE IF NOT EXISTS projects (
-        id SERIAL PRIMARY KEY,
+        id BIGINT PRIMARY KEY,
         title TEXT NOT NULL,
         description TEXT,
         image TEXT,
@@ -17,14 +17,14 @@ export default async function handler(request, response) {
       );
     `;
 
-        // Create events table
-        await sql`
+    // Create events table
+    await sql`
       CREATE TABLE IF NOT EXISTS events (
-        id SERIAL PRIMARY KEY,
+        id BIGINT PRIMARY KEY,
         title TEXT NOT NULL,
         description TEXT,
         date TEXT,
-        year INTEGER,
+        year TEXT,
         type TEXT,
         award TEXT,
         image TEXT,
@@ -33,10 +33,10 @@ export default async function handler(request, response) {
       );
     `;
 
-        // Create skills table
-        await sql`
+    // Create skills table
+    await sql`
       CREATE TABLE IF NOT EXISTS skills (
-        id SERIAL PRIMARY KEY,
+        id BIGINT PRIMARY KEY,
         name TEXT NOT NULL,
         category TEXT,
         icon TEXT,
@@ -44,8 +44,8 @@ export default async function handler(request, response) {
       );
     `;
 
-        return response.status(200).json({ message: 'Tables created successfully' });
-    } catch (error) {
-        return response.status(500).json({ error: error.message });
-    }
+    return response.status(200).json({ message: 'Tables created successfully' });
+  } catch (error) {
+    return response.status(500).json({ error: error.message });
+  }
 }

@@ -1,10 +1,46 @@
-import { useFirebaseSkills } from '../hooks/useFirebase';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { skills as defaultSkills } from '../data/portfolio-data';
+import './Skills.css';
 
 const Skills = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
+    const [skills, setSkills] = useState([]);
 
-    const [skills] = useFirebaseSkills();
+    useEffect(() => {
+        // Load skills from localStorage
+        const loadSkills = () => {
+            const saved = localStorage.getItem('portfolio_skills');
+            let loadedSkills = [];
+
+            if (saved) {
+                loadedSkills = JSON.parse(saved);
+            }
+
+            if (!loadedSkills || loadedSkills.length === 0) {
+                console.log('Skills: Using default skills');
+                loadedSkills = defaultSkills;
+                // Optionally save defaults to storage to persist them for editing
+                // localStorage.setItem('portfolio_skills', JSON.stringify(defaultSkills));
+            } else {
+                console.log('Skills: Loaded from storage:', loadedSkills.length);
+            }
+
+            setSkills(loadedSkills);
+        };
+
+        loadSkills();
+
+        // Listen for storage changes
+        window.addEventListener('storage', loadSkills);
+        window.addEventListener('portfolioDataUpdated', loadSkills);
+
+        return () => {
+            window.removeEventListener('storage', loadSkills);
+            window.removeEventListener('portfolioDataUpdated', loadSkills);
+        };
+    }, []);
 
     // Group skills by category
     const groupedSkills = skills.reduce((acc, skill) => {

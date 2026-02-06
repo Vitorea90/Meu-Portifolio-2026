@@ -1,7 +1,8 @@
-import { useFirebaseSkills } from '../hooks/useFirebase';
+import React, { useState } from 'react';
+import { useSkills } from '../hooks/useLocalStorage';
 
 const Skills = () => {
-    const [skills, setSkills] = useFirebaseSkills();
+    const [skills, setSkills] = useSkills();
     const [isAdding, setIsAdding] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({

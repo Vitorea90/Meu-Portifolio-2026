@@ -1,7 +1,8 @@
-import { useFirebaseEvents } from '../hooks/useFirebase';
+import React, { useState } from 'react';
+import { useEvents } from '../hooks/useLocalStorage';
 
 const Events = () => {
-    const [events, setEvents] = useFirebaseEvents();
+    const [events, setEvents] = useEvents();
     const [isAdding, setIsAdding] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({

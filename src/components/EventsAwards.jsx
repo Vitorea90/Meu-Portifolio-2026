@@ -1,10 +1,47 @@
-import { useFirebaseEvents } from '../hooks/useFirebase';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useInView } from 'framer-motion';
+import './EventsAwards.css';
+
+import { eventsAndAwards } from '../data/portfolio-data';
 
 const EventsAwards = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-    const [events, , loading] = useFirebaseEvents();
+    // Initialize with static data
+    const [events, setEvents] = useState(eventsAndAwards);
+
+    useEffect(() => {
+        // Load events from localStorage
+        const loadEvents = () => {
+            const localData = localStorage.getItem('portfolio_events');
+            if (localData) {
+                try {
+                    const savedEvents = JSON.parse(localData);
+                    if (Array.isArray(savedEvents)) {
+                        console.log('EventsAwards: Loaded events from localStorage');
+                        setEvents(savedEvents);
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing events:', e);
+                }
+            }
+            // Fallback
+            setEvents(eventsAndAwards);
+        };
+
+        loadEvents();
+
+        // Listen for storage changes
+        window.addEventListener('storage', loadEvents);
+        window.addEventListener('portfolioDataUpdated', loadEvents);
+
+        return () => {
+            window.removeEventListener('storage', loadEvents);
+            window.removeEventListener('portfolioDataUpdated', loadEvents);
+        };
+    }, []);
 
     const containerVariants = {
         hidden: { opacity: 0 },

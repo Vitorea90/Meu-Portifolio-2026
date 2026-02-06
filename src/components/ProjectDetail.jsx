@@ -3,19 +3,29 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './ProjectDetail.css';
 
 import { featuredProjects, publications } from '../data/portfolio-data';
-import { useFirebaseProjects } from '../hooks/useFirebase';
 
 const ProjectDetail = ({ projectId }) => {
-    const [projects, , loading] = useFirebaseProjects();
     const [project, setProject] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
-        if (!loading && projects) {
-            const found = projects.find(p => p.id === parseInt(projectId));
-            setProject(found);
+        // Try to find in localStorage first (dynamic updates)
+        const localProjects = JSON.parse(localStorage.getItem('portfolio_projects') || '[]');
+        let found = localProjects.find(p => p.id === parseInt(projectId));
+
+        // If not found in local dynamic list, check static data (backup)
+        if (!found) {
+            // Check featured projects
+            found = featuredProjects.find(p => p.id === parseInt(projectId));
+
+            // Also check general publications if it might be there (optional, but good for safety)
+            if (!found) {
+                found = publications.find(p => p.id === parseInt(projectId) && p.type === 'Projeto');
+            }
         }
-    }, [projectId, projects, loading]);
+
+        setProject(found);
+    }, [projectId]);
 
     const handleBack = () => {
         window.location.href = '/';
@@ -30,10 +40,6 @@ const ProjectDetail = ({ projectId }) => {
     const prevImage = () => {
         setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
-
-    if (loading) {
-        return <div className="project-detail-page"><div className="project-detail-loading">Carregando...</div></div>;
-    }
 
     if (!project) {
         return (
@@ -62,7 +68,7 @@ const ProjectDetail = ({ projectId }) => {
                 {/* Blur Background */}
                 <AnimatePresence mode="popLayout">
                     <motion.div
-                        key={`blur - ${currentImageIndex} `}
+                        key={`blur-${currentImageIndex}`}
                         className="hero-blur-bg"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -80,7 +86,7 @@ const ProjectDetail = ({ projectId }) => {
                         <motion.img
                             key={currentImageIndex}
                             src={images[currentImageIndex]}
-                            alt={`Project visualization ${currentImageIndex + 1} `}
+                            alt={`Project visualization ${currentImageIndex + 1}`}
                             className="hero-image-slide"
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
@@ -100,7 +106,7 @@ const ProjectDetail = ({ projectId }) => {
                             {images.map((_, index) => (
                                 <span
                                     key={index}
-                                    className={`indicator ${index === currentImageIndex ? 'active' : ''} `}
+                                    className={`indicator ${index === currentImageIndex ? 'active' : ''}`}
                                     onClick={() => setCurrentImageIndex(index)}
                                 />
                             ))}
@@ -211,3 +217,4 @@ const ProjectDetail = ({ projectId }) => {
 };
 
 export default ProjectDetail;
+

@@ -2,22 +2,40 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import './ProjectsCarousel.css';
 
+import { featuredProjects } from '../data/portfolio-data';
+
 const ProjectsCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-    // Get projects from localStorage ONLY - no fallback
-    const [projects, setProjects] = useState([]);
+    // Initialize with static data, updating if localStorage has newer data
+    const [projects, setProjects] = useState(featuredProjects);
 
     useEffect(() => {
         // Load projects from localStorage
         const loadProjects = () => {
-            const savedProjects = JSON.parse(localStorage.getItem('portfolio_projects') || '[]');
-            console.log('ProjectsCarousel: Loaded projects:', savedProjects);
-            setProjects(savedProjects);
+            const localData = localStorage.getItem('portfolio_projects');
+            if (localData) {
+                try {
+                    const savedProjects = JSON.parse(localData);
+                    // Only use local data if it's a valid array
+                    if (Array.isArray(savedProjects)) {
+                        console.log('ProjectsCarousel: Loaded projects from localStorage');
+                        setProjects(savedProjects);
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing projects:', e);
+                }
+            }
+            // Fallback to static data is handled by initial state, 
+            // but if we are here via event listener, we might want to reset?
+            // Actually, if localStorage is cleared, we should fallback to featuredProjects.
+            setProjects(featuredProjects);
         };
 
+        // Initial load check (in case localStorage exists)
         loadProjects();
 
         // Listen for storage changes (when another tab/window updates localStorage)

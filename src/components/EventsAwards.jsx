@@ -2,19 +2,33 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import './EventsAwards.css';
 
+import { eventsAndAwards } from '../data/portfolio-data';
+
 const EventsAwards = () => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-    // Get events from localStorage ONLY - no fallback
-    const [events, setEvents] = useState([]);
+    // Initialize with static data
+    const [events, setEvents] = useState(eventsAndAwards);
 
     useEffect(() => {
         // Load events from localStorage
         const loadEvents = () => {
-            const savedEvents = JSON.parse(localStorage.getItem('portfolio_events') || '[]');
-            console.log('EventsAwards: Loaded events:', savedEvents);
-            setEvents(savedEvents);
+            const localData = localStorage.getItem('portfolio_events');
+            if (localData) {
+                try {
+                    const savedEvents = JSON.parse(localData);
+                    if (Array.isArray(savedEvents)) {
+                        console.log('EventsAwards: Loaded events from localStorage');
+                        setEvents(savedEvents);
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error parsing events:', e);
+                }
+            }
+            // Fallback
+            setEvents(eventsAndAwards);
         };
 
         loadEvents();

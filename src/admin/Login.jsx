@@ -48,7 +48,7 @@ const Login = () => {
                         </button>
                     </form>
 
-                    <p className="login-hint">Senha padrão: admin123</p>
+
                 </div>
             </div>
         </div>

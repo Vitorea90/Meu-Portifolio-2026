@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         // Check if user is already logged in
-        const authToken = localStorage.getItem('admin_auth');
+        const authToken = sessionStorage.getItem('admin_auth');
         if (authToken === 'authenticated') {
             setIsAuthenticated(true);
         }
@@ -17,10 +17,10 @@ export const AuthProvider = ({ children }) => {
 
     const login = (password) => {
         // Simple password check - in production, use proper backend auth
-        const ADMIN_PASSWORD = 'admin123'; // Change this!
+        const ADMIN_PASSWORD = 'Copy9099';
 
         if (password === ADMIN_PASSWORD) {
-            localStorage.setItem('admin_auth', 'authenticated');
+            sessionStorage.setItem('admin_auth', 'authenticated');
             setIsAuthenticated(true);
             return true;
         }
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        localStorage.removeItem('admin_auth');
+        sessionStorage.removeItem('admin_auth');
         setIsAuthenticated(false);
     };
 

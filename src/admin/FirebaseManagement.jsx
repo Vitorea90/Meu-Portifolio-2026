@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useFirebaseProjects, useFirebaseEvents, useFirebaseSkills } from '../hooks/useFirebase';
 
-const DataManagement = () => {
+const FirebaseManagement = () => {
     const fileInputRef = useRef(null);
     const [projects, setProjects] = useFirebaseProjects();
     const [events, setEvents] = useFirebaseEvents();
@@ -119,4 +119,4 @@ const DataManagement = () => {
     );
 };
 
-export default DataManagement;
+export default FirebaseManagement;

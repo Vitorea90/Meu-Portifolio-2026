@@ -4,7 +4,7 @@ import Submissions from './Submissions';
 import Skills from './Skills';
 import Projects from './Projects';
 import Events from './Events';
-import DataManagement from './DataManagement';
+import FirebaseManagement from './FirebaseManagement';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -72,7 +72,7 @@ const Dashboard = () => {
                     {activeTab === 'skills' && <Skills />}
                     {activeTab === 'projects' && <Projects />}
                     {activeTab === 'events' && <Events />}
-                    {activeTab === 'data' && <DataManagement />}
+                    {activeTab === 'data' && <FirebaseManagement />}
                 </div>
             </main>
         </div>

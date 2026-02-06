@@ -92,30 +92,17 @@ const Skills = () => {
                         Tecnologias e ferramentas que uso no dia a dia
                     </p>
 
-                    <div className="skills-categories">
-                        {Object.entries(groupedSkills).map(([category, categorySkills]) => (
+                    <div className="skills-grid-flat">
+                        {skills.map((skill, index) => (
                             <motion.div
-                                key={category}
-                                className="skill-category"
-                                variants={containerVariants}
-                                initial="hidden"
-                                animate="visible"
+                                key={skill.id}
+                                className="skill-item"
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.3, delay: index * 0.05 }}
+                                whileHover={{ scale: 1.05 }}
                             >
-                                <h3 className="category-title">{category}</h3>
-                                <div className="skills-list">
-                                    {categorySkills.map((skill) => (
-                                        <motion.div
-                                            key={skill.id}
-                                            className="skill-item"
-                                            variants={itemVariants}
-                                            whileHover={{ scale: 1.05 }}
-                                        >
-                                            <div className="skill-header">
-                                                <span className="skill-name">{skill.name}</span>
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </div>
+                                <span className="skill-name">{skill.name}</span>
                             </motion.div>
                         ))}
                     </div>

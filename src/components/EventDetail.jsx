@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './EventDetail.css';
-import { useVercelEvents } from '../hooks/useVercel';
+import { useVercelEvent } from '../hooks/useVercel';
 
 const EventDetail = ({ eventId }) => {
-    const [event, setEvent] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [events, , loading] = useVercelEvents();
+    const [event, loading] = useVercelEvent(eventId);
 
-    useEffect(() => {
-        if (!loading && events) {
-            const found = events.find(e => e.id === parseInt(eventId));
-            setEvent(found);
-        }
-    }, [eventId, events, loading]);
+    // No need for useEffect filtering anymore as hook handles find by id on server
+
 
     const handleBack = () => {
         window.location.href = '/';

@@ -5,29 +5,52 @@ export default async function handler(request, response) {
     const { type } = request.query;
 
     if (method === 'GET') {
+        const { type, id } = request.query;
+        let result;
         try {
-            let result;
+            if (id) {
+                // Fetch single item with all data
+                if (type === 'projects') {
+                    result = await sql`SELECT * FROM projects WHERE id = ${id};`;
+                } else if (type === 'events') {
+                    result = await sql`SELECT * FROM events WHERE id = ${id};`;
+                } else if (type === 'skills') {
+                    result = await sql`SELECT * FROM skills WHERE id = ${id};`;
+                }
+                // Helper to map snake_case to camelCase for single item
+                const mappedItem = result.rows[0] ? Object.keys(result.rows[0]).reduce((acc, key) => {
+                    const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+                    acc[camelKey] = result.rows[0][key];
+                    return acc;
+                }, {}) : null;
+                return response.status(200).json(mappedItem);
+            }
+
+            // Fetch list - Exclude large 'images' array for projects and events
             if (type === 'projects') {
-                result = await sql`SELECT * FROM projects ORDER BY id ASC;`;
+                result = await sql`SELECT id, title, description, image, tech_stack, link, github FROM projects ORDER BY id ASC;`;
             } else if (type === 'events') {
-                result = await sql`SELECT * FROM events ORDER BY id ASC;`;
+                result = await sql`SELECT id, title, description, date, year, type, award, image FROM events ORDER BY id ASC;`;
             } else if (type === 'skills') {
                 result = await sql`SELECT * FROM skills ORDER BY id ASC;`;
             } else {
                 return response.status(400).json({ error: 'Invalid type' });
             }
 
-            // Map snake_case to camelCase for frontend compatibility
-            const items = result.rows.map(row => {
-                const item = { ...row };
-                if (item.tech_stack) item.techStack = item.tech_stack;
-                if (item.updated_at) item.updatedAt = item.updated_at;
-                return item;
+            // Helper to map snake_case to camelCase
+            const mappedData = result.rows.map(row => {
+                const mapped = {};
+                for (const key in row) {
+                    const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+                    mapped[camelKey] = row[key];
+                }
+                return mapped;
             });
 
-            return response.status(200).json(items);
+            return response.status(200).json(mappedData);
         } catch (error) {
             console.error('API Error:', error);
+            // On error, return empty array to prevent frontend crash
             return response.status(200).json([]);
         }
     }

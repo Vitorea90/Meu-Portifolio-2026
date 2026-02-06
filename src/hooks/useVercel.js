@@ -110,6 +110,40 @@ export const useVercelData = (type, initialValue) => {
     return [data, controller, loading];
 };
 
+export const useVercelItem = (type, id) => {
+    const [item, setItem] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (!id) {
+            setLoading(false);
+            return;
+        }
+
+        let isMounted = true;
+        const fetchItem = async () => {
+            try {
+                const response = await fetch(`/api/data?type=${type}&id=${id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (isMounted) setItem(data);
+                }
+            } catch (error) {
+                console.error(`Error fetching ${type} item ${id}:`, error);
+            } finally {
+                if (isMounted) setLoading(false);
+            }
+        };
+
+        fetchItem();
+        return () => { isMounted = false; };
+    }, [type, id]);
+
+    return [item, loading];
+};
+
 export const useVercelProjects = () => useVercelData('projects', featuredProjects);
+export const useVercelProject = (id) => useVercelItem('projects', id);
 export const useVercelEvents = () => useVercelData('events', eventsAndAwards);
+export const useVercelEvent = (id) => useVercelItem('events', id);
 export const useVercelSkills = () => useVercelData('skills', skills);

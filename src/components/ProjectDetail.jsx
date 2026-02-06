@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ProjectDetail.css';
-import { useVercelProjects } from '../hooks/useVercel';
+import { useVercelProject } from '../hooks/useVercel';
 
 const ProjectDetail = ({ projectId }) => {
-    const [project, setProject] = useState(null);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [projects, , loading] = useVercelProjects();
+    const [project, loading] = useVercelProject(projectId);
 
-    useEffect(() => {
-        if (!loading && projects) {
-            const found = projects.find(p => p.id === parseInt(projectId));
-            setProject(found);
-        }
-    }, [projectId, projects, loading]);
+    // No need for useEffect filtering anymore as hook handles find by id on server
+
 
     const handleBack = () => {
         window.location.href = '/';

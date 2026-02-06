@@ -23,7 +23,7 @@ const Dashboard = () => {
         { id: 'skills', label: 'Habilidades', icon: '💡' },
         { id: 'projects', label: 'Projetos', icon: '🚀' },
         { id: 'events', label: 'Eventos', icon: '🏆' },
-        { id: 'data', label: 'Dados', icon: '💾' },
+        { id: 'data', label: 'Nuvem & Backup', icon: '☁️' },
     ];
 
     return (

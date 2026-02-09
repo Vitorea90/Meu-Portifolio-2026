@@ -85,7 +85,16 @@ const Navbar = ({ activeSection: initialActive }) => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
-                    <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <a
+                        href={isHome ? "/#home" : `/#${active}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                        onClick={(e) => {
+                            if (isHome) {
+                                e.preventDefault();
+                                scrollToSection('home');
+                            }
+                        }}
+                    >
                         <span className="logo-text">Portfolio</span>
                     </a>
                 </motion.div>

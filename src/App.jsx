@@ -116,6 +116,18 @@ function AppContent() {
 }
 
 function App() {
+    React.useEffect(() => {
+        const hash = window.location.hash;
+        if (hash) {
+            setTimeout(() => {
+                const element = document.querySelector(hash);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+    }, []);
+
     return (
         <AuthProvider>
             <AppContent />

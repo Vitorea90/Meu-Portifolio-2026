@@ -110,8 +110,12 @@ export const useVercelData = (type, initialValue) => {
     return [data, controller, loading];
 };
 
-export const useVercelItem = (type, id) => {
-    const [item, setItem] = useState(null);
+export const useVercelItem = (type, id, initialData = []) => {
+    const findInStatic = () => {
+        return initialData.find(item => String(item.id) === String(id));
+    };
+
+    const [item, setItem] = useState(findInStatic());
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -127,9 +131,15 @@ export const useVercelItem = (type, id) => {
                 if (response.ok) {
                     const data = await response.json();
                     if (isMounted) setItem(data);
+                } else {
+                    // If API fails (e.g. 404 or connection error), keep/set static data
+                    const staticItem = findInStatic();
+                    if (isMounted && staticItem) setItem(staticItem);
                 }
             } catch (error) {
                 console.error(`Error fetching ${type} item ${id}:`, error);
+                const staticItem = findInStatic();
+                if (isMounted && staticItem) setItem(staticItem);
             } finally {
                 if (isMounted) setLoading(false);
             }
@@ -143,7 +153,7 @@ export const useVercelItem = (type, id) => {
 };
 
 export const useVercelProjects = () => useVercelData('projects', featuredProjects);
-export const useVercelProject = (id) => useVercelItem('projects', id);
+export const useVercelProject = (id) => useVercelItem('projects', id, featuredProjects);
 export const useVercelEvents = () => useVercelData('events', eventsAndAwards);
-export const useVercelEvent = (id) => useVercelItem('events', id);
+export const useVercelEvent = (id) => useVercelItem('events', id, eventsAndAwards);
 export const useVercelSkills = () => useVercelData('skills', skills);

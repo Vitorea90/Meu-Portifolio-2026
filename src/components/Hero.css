@@ -180,20 +180,6 @@
     /* Alinha embaixo */
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     display: block;
-    animation: float-profile 5s ease-in-out infinite;
-    will-change: transform;
-}
-
-@keyframes float-profile {
-
-    0%,
-    100% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-8px);
-    }
 }
 
 .hero-glow {

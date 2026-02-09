@@ -46,15 +46,17 @@ const Hero = () => {
 
                     {/* Imagem à Direita */}
                     <div className="hero-image-wrapper">
-                        <motion.div
-                            className="image-box"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                        >
-                            <img src="/profile.png" alt="Vitor Emanuel" className="hero-profile-img" />
+                        <div className="image-box">
+                            <motion.img
+                                src="/profile.png"
+                                alt="Vitor Emanuel"
+                                className="hero-profile-img"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 1, ease: "easeOut" }}
+                            />
                             <div className="hero-glow"></div>
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
             </div>

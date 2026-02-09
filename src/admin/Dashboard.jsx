@@ -7,14 +7,7 @@ import Events from './Events';
 import DataManagement from './DataManagement';
 import './Dashboard.css';
 
-import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import Submissions from './Submissions';
-import Skills from './Skills';
-import Projects from './Projects';
-import Events from './Events';
-import DataManagement from './DataManagement';
-import './Dashboard.css';
+
 
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('submissions');

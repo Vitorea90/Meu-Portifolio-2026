@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { featuredProjects, eventsAndAwards, skills } from '../data/portfolio-data';
+import { featuredProjects, eventsAndAwards, skills, publications } from '../data/portfolio-data';
+
+// Global flag to track if API is offline to avoid repeated console spam and delays
+let apiOffline = false;
 
 /**
  * Hook to manage data via Vercel Postgres API with fallback to static data
@@ -8,22 +11,35 @@ import { featuredProjects, eventsAndAwards, skills } from '../data/portfolio-dat
  */
 export const useVercelData = (type, initialValue) => {
     const [data, setData] = useState(initialValue);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(!apiOffline); // Only show loading if we don't know it's offline
 
     useEffect(() => {
-        let isMounted = true;
+        if (apiOffline) {
+            setLoading(false);
+            return;
+        }
 
+        let isMounted = true;
         const fetchData = async () => {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000);
+
             try {
-                const response = await fetch(`/api/data?type=${type}`);
+                const response = await fetch(`/api/data?type=${type}`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
                 if (response.ok) {
                     const cloudData = await response.json();
                     if (isMounted && Array.isArray(cloudData) && cloudData.length > 0) {
                         setData(cloudData);
                     }
+                } else if (response.status === 502 || response.status === 504) {
+                    // 502/504 means the local proxy failed to connect to the backend
+                    apiOffline = true;
                 }
             } catch (error) {
-                console.error(`Error fetching ${type} from Vercel:`, error);
+                // Connection errors or timeouts
+                apiOffline = true;
             } finally {
                 if (isMounted) setLoading(false);
             }
@@ -34,36 +50,31 @@ export const useVercelData = (type, initialValue) => {
     }, [type]);
 
     const saveData = async (newData) => {
+        if (apiOffline) return false;
         try {
             const response = await fetch(`/api/data?type=${type}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ items: newData }),
             });
-
             if (response.ok) {
                 setData(newData);
                 return true;
             }
             return false;
         } catch (error) {
-            console.error(`Error saving ${type} to Vercel:`, error);
             return false;
         }
     };
 
     const upsertItem = async (item) => {
+        if (apiOffline) return false;
         try {
             const response = await fetch(`/api/data?type=${type}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'upsert', item }),
             });
-
             if (response.ok) {
                 setData(prev => {
                     const exists = prev.find(i => i.id == item.id);
@@ -76,28 +87,24 @@ export const useVercelData = (type, initialValue) => {
             }
             return false;
         } catch (error) {
-            console.error(`Error upserting ${type} item to Vercel:`, error);
             return false;
         }
     };
 
     const deleteItem = async (id) => {
+        if (apiOffline) return false;
         try {
             const response = await fetch(`/api/data?type=${type}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ action: 'delete', id }),
             });
-
             if (response.ok) {
                 setData(prev => prev.filter(i => i.id != id));
                 return true;
             }
             return false;
         } catch (error) {
-            console.error(`Error deleting ${type} item from Vercel:`, error);
             return false;
         }
     };
@@ -112,34 +119,47 @@ export const useVercelData = (type, initialValue) => {
 
 export const useVercelItem = (type, id, initialData = []) => {
     const findInStatic = () => {
-        return initialData.find(item => String(item.id) === String(id));
+        // Search in primary list
+        let item = initialData.find(i => String(i.id) === String(id));
+        if (item) return item;
+
+        // Search in all secondary lists
+        const allLocal = [...featuredProjects, ...eventsAndAwards, ...(publications || [])];
+        return allLocal.find(i => String(i.id) === String(id));
     };
 
-    const [item, setItem] = useState(findInStatic());
-    const [loading, setLoading] = useState(true);
+    const staticItem = findInStatic();
+    const [item, setItem] = useState(staticItem);
+    const [loading, setLoading] = useState(!staticItem && !apiOffline);
 
     useEffect(() => {
-        if (!id) {
+        if (!id || apiOffline) {
             setLoading(false);
             return;
         }
 
         let isMounted = true;
         const fetchItem = async () => {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 2000);
+
             try {
-                const response = await fetch(`/api/data?type=${type}&id=${id}`);
+                const response = await fetch(`/api/data?type=${type}&id=${id}`, { signal: controller.signal });
+                clearTimeout(timeoutId);
+
                 if (response.ok) {
                     const data = await response.json();
                     if (isMounted) setItem(data);
-                } else {
-                    // If API fails (e.g. 404 or connection error), keep/set static data
-                    const staticItem = findInStatic();
-                    if (isMounted && staticItem) setItem(staticItem);
+                } else if (response.status === 502 || response.status === 504) {
+                    apiOffline = true;
                 }
             } catch (error) {
-                console.error(`Error fetching ${type} item ${id}:`, error);
-                const staticItem = findInStatic();
-                if (isMounted && staticItem) setItem(staticItem);
+                apiOffline = true;
+                // Final lookup effort if fetch failed and we still don't have the item
+                if (isMounted && !item) {
+                    const retry = findInStatic();
+                    if (retry) setItem(retry);
+                }
             } finally {
                 if (isMounted) setLoading(false);
             }

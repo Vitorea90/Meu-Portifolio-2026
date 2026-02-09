@@ -33,7 +33,7 @@ const EventDetail = ({ eventId }) => {
         return '';
     };
 
-    if (loading) {
+    if (loading && !event) {
         return <Loading />;
     }
 

@@ -24,7 +24,7 @@ const ProjectDetail = ({ projectId }) => {
         setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
 
-    if (loading) {
+    if (loading && !project) {
         return <Loading />;
     }
 

@@ -7,8 +7,18 @@ import Events from './Events';
 import DataManagement from './DataManagement';
 import './Dashboard.css';
 
+import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import Submissions from './Submissions';
+import Skills from './Skills';
+import Projects from './Projects';
+import Events from './Events';
+import DataManagement from './DataManagement';
+import './Dashboard.css';
+
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('submissions');
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { logout } = useAuth();
 
     const handleLogout = () => {
@@ -26,20 +36,26 @@ const Dashboard = () => {
         { id: 'data', label: 'Dados', icon: '💾' },
     ];
 
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!mobileMenuOpen);
+    };
+
     return (
         <div className="dashboard">
             {/* Sidebar */}
-            <aside className="dashboard-sidebar">
+            <aside className={`dashboard-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
                 <div className="sidebar-header">
-                    <h2 className="sidebar-title">Admin Panel</h2>
-                    <p className="sidebar-subtitle">Gerenciamento</p>
+                    <h2 className="sidebar-title">Vitor.Dev</h2>
                 </div>
 
                 <nav className="sidebar-nav">
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
+                            onClick={() => {
+                                setActiveTab(tab.id);
+                                setMobileMenuOpen(false);
+                            }}
                             className={`nav-item ${activeTab === tab.id ? 'active' : ''}`}
                         >
                             <span className="nav-icon">{tab.icon}</span>
@@ -59,12 +75,20 @@ const Dashboard = () => {
             {/* Main Content */}
             <main className="dashboard-main">
                 <header className="dashboard-header">
-                    <h1 className="page-title">
-                        {tabs.find(t => t.id === activeTab)?.label}
-                    </h1>
-                    <a href="/" className="view-site-btn" target="_blank" rel="noopener noreferrer">
-                        Ver Site
-                    </a>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+                            ☰
+                        </button>
+                        <h1 className="page-title">
+                            {tabs.find(t => t.id === activeTab)?.label}
+                        </h1>
+                    </div>
+
+                    <div className="header-actions">
+                        <a href="/" className="view-site-btn" target="_blank" rel="noopener noreferrer">
+                            <span>👁️</span> Ver Site
+                        </a>
+                    </div>
                 </header>
 
                 <div className="dashboard-content">
@@ -75,6 +99,20 @@ const Dashboard = () => {
                     {activeTab === 'data' && <DataManagement />}
                 </div>
             </main>
+
+            {/* Mobile Overlay */}
+            {mobileMenuOpen && (
+                <div
+                    className="mobile-overlay"
+                    style={{
+                        position: 'fixed',
+                        inset: 0,
+                        background: 'rgba(0,0,0,0.5)',
+                        zIndex: 40
+                    }}
+                    onClick={() => setMobileMenuOpen(false)}
+                />
+            )}
         </div>
     );
 };

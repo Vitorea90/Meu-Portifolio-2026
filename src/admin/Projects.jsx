@@ -82,7 +82,7 @@ const Projects = () => {
 
             {isAdding && (
                 <div className="form-card">
-                    <h3 className="form-card-title">
+                    <h3 className="form-title">
                         {editingId ? 'Editar Projeto' : 'Novo Projeto'}
                     </h3>
                     <form onSubmit={handleSubmit} className="admin-form">
@@ -244,7 +244,7 @@ const Projects = () => {
                             </div>
                         </div>
                         <div className="project-actions">
-                            <button onClick={() => handleEdit(project)} className="btn-small">
+                            <button onClick={() => handleEdit(project)} className="btn-small btn-edit">
                                 ✏️ Editar
                             </button>
                             <button onClick={() => handleDelete(project.id)} className="btn-small btn-danger">

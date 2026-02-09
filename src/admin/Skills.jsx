@@ -67,7 +67,7 @@ const Skills = () => {
 
             {isAdding && (
                 <div className="form-card">
-                    <h3 className="form-card-title">
+                    <h3 className="form-title">
                         {editingId ? 'Editar Habilidade' : 'Nova Habilidade'}
                     </h3>
                     <form onSubmit={handleSubmit} className="admin-form">
@@ -121,7 +121,7 @@ const Skills = () => {
                         </div>
 
                         <div className="skill-actions">
-                            <button onClick={() => handleEdit(skill)} className="btn-small">
+                            <button onClick={() => handleEdit(skill)} className="btn-small btn-edit">
                                 ✏️ Editar
                             </button>
                             <button onClick={() => handleDelete(skill.id)} className="btn-small btn-danger">

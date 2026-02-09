@@ -128,13 +128,7 @@ const DataManagement = () => {
                 <h2 className="section-title">Gerenciamento de Nuvem (Vercel Postgres)</h2>
             </div>
 
-            <div className="data-management-card" style={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                padding: '2rem',
-                borderRadius: '12px',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                marginBottom: '2rem'
-            }}>
+            <div className="glass-card" style={{ marginBottom: '2rem' }}>
                 <h3 style={{ color: 'white', marginBottom: '1rem' }}>⚙️ Configuração do Banco</h3>
                 <p style={{ color: '#aaa', marginBottom: '1.5rem', lineHeight: '1.6' }}>
                     Se esta é a primeira vez usando o Vercel Postgres ou se você resetou o banco, use o botão abaixo para criar as tabelas necessárias.
@@ -180,9 +174,9 @@ const DataManagement = () => {
                     🛠️ Consertar Banco
                 </button>
             </div>
-            <div style={{ marginBottom: '2rem' }}>
-                <h3 style={{ color: 'white', marginBottom: '1rem' }}>📤 Exportar Dados (Backup)</h3>
-                <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
+            <div className="glass-card" style={{ marginBottom: '2rem' }}>
+                <h3 className="section-title" style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>📤 Exportar Dados (Backup)</h3>
+                <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1rem', lineHeight: '1.6' }}>
                     Baixe um arquivo contendo todos os seus projetos, eventos e habilidades.
                     Use isso para salvar suas alterações ou transferir dados do Localhost para o site ao vivo.
                 </p>
@@ -191,9 +185,9 @@ const DataManagement = () => {
                 </button>
             </div>
 
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
-                <h3 style={{ color: 'white', marginBottom: '1rem' }}>📥 Importar Dados</h3>
-                <p style={{ color: '#aaa', marginBottom: '1rem', lineHeight: '1.6' }}>
+            <div className="glass-card">
+                <h3 className="section-title" style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>📥 Importar Dados</h3>
+                <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1rem', lineHeight: '1.6' }}>
                     Carregue um arquivo de backup para restaurar seus dados.
                     <strong>Atenção:</strong> Isso substituirá os dados atuais deste navegador.
                 </p>
@@ -207,7 +201,6 @@ const DataManagement = () => {
                 <button
                     onClick={() => fileInputRef.current.click()}
                     className="btn btn-secondary"
-                    style={{ border: '1px solid rgba(255,255,255,0.2)' }}
                 >
                     Selecionar Arquivo e Importar
                 </button>

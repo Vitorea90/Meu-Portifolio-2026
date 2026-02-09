@@ -88,7 +88,7 @@ const Events = () => {
 
             {isAdding && (
                 <div className="form-card">
-                    <h3 className="form-card-title">
+                    <h3 className="form-title">
                         {editingId ? 'Editar Evento' : 'Novo Evento'}
                     </h3>
                     <form onSubmit={handleSubmit} className="admin-form">
@@ -269,7 +269,7 @@ const Events = () => {
                             </div>
                         )}
                         <div className="event-actions">
-                            <button onClick={() => handleEdit(event)} className="btn-small">
+                            <button onClick={() => handleEdit(event)} className="btn-small btn-edit">
                                 ✏️ Editar
                             </button>
                             <button onClick={() => handleDelete(event.id)} className="btn-small btn-danger">

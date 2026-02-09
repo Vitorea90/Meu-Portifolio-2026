@@ -35,9 +35,9 @@ export default async function handler(request, response) {
             // Fetch list - Exclude large 'images' array
             try {
                 if (type === 'projects') {
-                    result = await sql`SELECT id, title, description, image, tech_stack, link, github FROM projects ORDER BY id ASC;`;
+                    result = await sql`SELECT id, title, description, image, images, tech_stack, link, github FROM projects ORDER BY id ASC;`;
                 } else if (type === 'events') {
-                    result = await sql`SELECT id, title, description, date, year, type, award, icon, image FROM events ORDER BY id ASC;`;
+                    result = await sql`SELECT id, title, description, date, year, type, award, icon, image, images FROM events ORDER BY id ASC;`;
                 } else if (type === 'skills') {
                     result = await sql`SELECT * FROM skills ORDER BY id ASC;`;
                 }
@@ -45,7 +45,7 @@ export default async function handler(request, response) {
                 // Fallback for missing 'icon' column in list view
                 if (type === 'events' && e.message.includes('icon')) {
                     console.log("Fallback: 'icon' column missing in events table");
-                    result = await sql`SELECT id, title, description, date, year, type, award, image FROM events ORDER BY id ASC;`;
+                    result = await sql`SELECT id, title, description, date, year, type, award, image, images FROM events ORDER BY id ASC;`;
                 } else {
                     throw e;
                 }

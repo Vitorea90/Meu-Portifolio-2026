@@ -22,7 +22,7 @@ export const useVercelData = (type, initialValue) => {
         let isMounted = true;
         const fetchData = async () => {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000);
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
 
             try {
                 const response = await fetch(`/api/data?type=${type}`, { signal: controller.signal });
@@ -141,7 +141,7 @@ export const useVercelItem = (type, id, initialData = []) => {
         let isMounted = true;
         const fetchItem = async () => {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000);
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
 
             try {
                 const response = await fetch(`/api/data?type=${type}&id=${id}`, { signal: controller.signal });

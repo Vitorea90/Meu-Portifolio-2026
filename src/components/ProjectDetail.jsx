@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ProjectDetail.css';
-import { useVercelProject } from '../hooks/useVercel';
+import Loading from './Loading';
 
 const ProjectDetail = ({ projectId }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -23,6 +23,10 @@ const ProjectDetail = ({ projectId }) => {
     const prevImage = () => {
         setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     if (!project) {
         return (

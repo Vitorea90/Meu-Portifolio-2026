@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './EventDetail.css';
-import { useVercelEvent } from '../hooks/useVercel';
+import Loading from './Loading';
 
 const EventDetail = ({ eventId }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -32,6 +32,10 @@ const EventDetail = ({ eventId }) => {
         }
         return '';
     };
+
+    if (loading) {
+        return <Loading />;
+    }
 
     if (!event) {
         return (

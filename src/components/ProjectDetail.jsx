@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './ProjectDetail.css';
 import Loading from './Loading';
+import { useVercelProject } from '../hooks/useVercel';
 
 const ProjectDetail = ({ projectId }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);

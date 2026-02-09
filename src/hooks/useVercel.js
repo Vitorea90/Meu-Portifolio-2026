@@ -148,8 +148,10 @@ export const useVercelItem = (type, id, initialData = []) => {
                 clearTimeout(timeoutId);
 
                 if (response.ok) {
-                    const data = await response.json();
-                    if (isMounted) setItem(data);
+                    const cloudData = await response.json();
+                    if (isMounted && cloudData && (cloudData.id || cloudData._id)) {
+                        setItem(cloudData);
+                    }
                 } else if (response.status === 502 || response.status === 504) {
                     apiOffline = true;
                 }

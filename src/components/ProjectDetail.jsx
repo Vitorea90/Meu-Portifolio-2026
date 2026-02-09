@@ -41,9 +41,10 @@ const ProjectDetail = ({ projectId }) => {
         );
     }
 
-    // Split title to highlight last word
-    const titleWords = project.title.split(' ');
-    const lastWord = titleWords.pop();
+    // Defensive check for title before splitting
+    const title = project.title || 'Projeto';
+    const titleWords = title.split(' ');
+    const lastWord = titleWords.length > 0 ? titleWords.pop() : '';
     const restOfTitle = titleWords.join(' ');
 
     return (

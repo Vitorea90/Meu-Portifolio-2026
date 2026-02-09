@@ -64,9 +64,10 @@ const EventDetail = ({ eventId }) => {
         setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     };
 
-    // Split title to highlight last word
-    const titleWords = event.title.split(' ');
-    const lastWord = titleWords.pop();
+    // Defensive check for title before splitting
+    const title = event.title || 'Evento';
+    const titleWords = title.split(' ');
+    const lastWord = titleWords.length > 0 ? titleWords.pop() : '';
     const restOfTitle = titleWords.join(' ');
 
     return (
